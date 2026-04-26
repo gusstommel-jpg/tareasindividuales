@@ -3,1150 +3,1171 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Tareas de Casa</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<title>Tareas de Casa 🏠</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #F0F4F8;
-    --card: #FFFFFF;
-    --text: #1A202C;
-    --text-light: #718096;
-    --border: #E2E8F0;
-    --shadow: 0 4px 20px rgba(0,0,0,0.08);
-    --radius: 20px;
-    --radius-sm: 12px;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-  body {
-    font-family: 'Nunito Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  h1, h2, h3, .display { font-family: 'Nunito', sans-serif; }
-
-  /* SCREENS */
-  .screen { display: none; min-height: 100vh; flex-direction: column; }
-  .screen.active { display: flex; }
-
-  /* HOME SCREEN */
-  #screen-home {
-    background: linear-gradient(160deg, #667eea 0%, #764ba2 100%);
-    padding: 0;
-  }
-
-  .home-header {
-    padding: 52px 24px 24px;
-    color: white;
-  }
-
-  .home-header .greeting {
-    font-family: 'Nunito', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    opacity: 0.75;
-    margin-bottom: 6px;
-  }
-
-  .home-header h1 {
-    font-size: 30px;
-    font-weight: 900;
-    line-height: 1.1;
-  }
-
-  .home-header .week-label {
-    font-size: 13px;
-    opacity: 0.75;
-    margin-top: 6px;
-    font-weight: 600;
-  }
-
-  .cards-container {
-    flex: 1;
-    padding: 16px 16px 100px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    align-content: start;
-  }
-
-  .child-card {
-    background: white;
-    border-radius: 22px;
-    padding: 20px 16px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .child-card:active { transform: scale(0.97); }
-
-  .child-card .card-accent {
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 5px;
-    border-radius: 22px 22px 0 0;
-  }
-
-  .child-card .child-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Nunito', sans-serif;
-    font-size: 20px;
-    font-weight: 900;
-    color: white;
-    margin-bottom: 12px;
-  }
-
-  .child-card .child-name {
-    font-family: 'Nunito', sans-serif;
-    font-size: 15px;
-    font-weight: 800;
-    color: #1A202C;
-    margin-bottom: 10px;
-  }
-
-  .child-card .progress-ring-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .ring-wrap { position: relative; width: 52px; height: 52px; flex-shrink: 0; }
-  .ring-wrap svg { transform: rotate(-90deg); }
-  .ring-bg { fill: none; stroke: #F0F4F8; stroke-width: 5; }
-  .ring-fill { fill: none; stroke-width: 5; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
-  .ring-text {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Nunito', sans-serif;
-    font-size: 11px;
-    font-weight: 900;
-    color: #1A202C;
-  }
-
-  .progress-info .pct-label {
-    font-family: 'Nunito', sans-serif;
-    font-size: 22px;
-    font-weight: 900;
-    line-height: 1;
-  }
-
-  .progress-info .pct-sub {
-    font-size: 11px;
-    color: #718096;
-    font-weight: 600;
-    margin-top: 2px;
-  }
-
-  /* ADMIN FAB */
-  .admin-fab {
-    position: fixed;
-    bottom: 24px;
-    right: 20px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.25);
-    backdrop-filter: blur(10px);
-    border: 1.5px solid rgba(255,255,255,0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 100;
-    font-size: 20px;
-    color: white;
-    transition: background 0.2s;
-  }
-  .admin-fab:active { background: rgba(255,255,255,0.4); }
-
-  /* CHILD SCREEN */
-  #screen-child {
-    background: var(--bg);
-  }
-
-  .child-header {
-    padding: 52px 20px 20px;
-    color: white;
-    position: relative;
-  }
-
-  .back-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    color: rgba(255,255,255,0.85);
-    cursor: pointer;
-    margin-bottom: 18px;
-    background: none;
-    border: none;
-    padding: 0;
-  }
-
-  .child-header-name {
-    font-family: 'Nunito', sans-serif;
-    font-size: 28px;
-    font-weight: 900;
-    margin-bottom: 4px;
-  }
-
-  .child-header-date {
-    font-size: 13px;
-    opacity: 0.8;
-    font-weight: 600;
-  }
-
-  .weekly-progress-bar {
-    margin-top: 16px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50px;
-    height: 10px;
-    overflow: hidden;
-  }
-
-  .weekly-progress-fill {
-    height: 100%;
-    border-radius: 50px;
-    background: white;
-    transition: width 0.5s ease;
-  }
-
-  .weekly-pct-label {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 6px;
-  }
-
-  .weekly-pct-label span {
-    font-size: 12px;
-    opacity: 0.85;
-    font-weight: 700;
-  }
-
-  /* DAY TABS */
-  .day-tabs-wrap {
-    background: white;
-    padding: 12px 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-
-  .day-tabs {
-    display: flex;
-    gap: 6px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-    padding-bottom: 2px;
-  }
-
-  .day-tabs::-webkit-scrollbar { display: none; }
-
-  .day-tab {
-    flex-shrink: 0;
-    padding: 8px 14px;
-    border-radius: 50px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 12px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: all 0.15s;
-    background: #F0F4F8;
-    color: #718096;
-    border: none;
-    text-align: center;
-    min-width: 52px;
-  }
-
-  .day-tab .tab-day { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .day-tab .tab-num { display: block; font-size: 15px; margin-top: 1px; }
-
-  .day-tab.active {
-    color: white;
-  }
-
-  .day-tab.today-tab:not(.active) {
-    border: 2px solid currentColor;
-    background: transparent;
-  }
-
-  /* TASKS */
-  .tasks-section {
-    padding: 16px;
-  }
-
-  .tasks-section h3 {
-    font-family: 'Nunito', sans-serif;
-    font-size: 13px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    color: #718096;
-    margin-bottom: 12px;
-  }
-
-  .task-item {
-    background: white;
-    border-radius: 16px;
-    padding: 0;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    display: flex;
-    align-items: center;
-    min-height: 68px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.1s ease;
-    -webkit-user-select: none;
-    user-select: none;
-  }
-
-  .task-item:active { transform: scale(0.99); }
-
-  .task-item.completed {
-    opacity: 0.65;
-  }
-
-  .task-check-area {
-    width: 68px;
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    align-self: stretch;
-  }
-
-  .task-checkbox {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2.5px solid #CBD5E0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    font-size: 14px;
-    color: white;
-  }
-
-  .task-item.completed .task-checkbox {
-    border-color: transparent;
-    background: currentColor;
-  }
-
-  .task-body {
-    flex: 1;
-    padding: 14px 16px 14px 0;
-  }
-
-  .task-name {
-    font-family: 'Nunito', sans-serif;
-    font-size: 15px;
-    font-weight: 700;
-    color: #2D3748;
-    line-height: 1.3;
-  }
-
-  .task-item.completed .task-name {
-    text-decoration: line-through;
-    color: #A0AEC0;
-  }
-
-  .task-freq-badge {
-    display: inline-block;
-    margin-top: 5px;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-    background: #F7FAFC;
-    color: #718096;
-  }
-
-  .task-week-count {
-    font-size: 11px;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 20px;
-    margin-left: 4px;
-    display: inline-block;
-  }
-
-  /* READONLY OVERLAY */
-  .readonly-banner {
-    background: #FEF3C7;
-    color: #92400E;
-    text-align: center;
-    padding: 10px 16px;
-    font-size: 13px;
-    font-weight: 700;
-  }
-
-  /* CONFETTI */
-  .confetti-piece {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    border-radius: 2px;
-    pointer-events: none;
-    z-index: 9999;
-    animation: confetti-fall 0.8s ease-out forwards;
-  }
-
-  @keyframes confetti-fall {
-    0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
-    100% { transform: translateY(80px) rotate(360deg) scale(0); opacity: 0; }
-  }
-
-  /* HISTORY in child view */
-  .history-btn {
-    margin: 0 16px 16px;
-    padding: 14px;
-    background: white;
-    border-radius: 14px;
-    border: none;
-    width: calc(100% - 32px);
-    font-family: 'Nunito', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: #718096;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  }
-
-  /* ADMIN SCREEN */
-  #screen-admin {
-    background: var(--bg);
-  }
-
-  .admin-header {
-    background: linear-gradient(135deg, #2D3748, #4A5568);
-    padding: 52px 20px 24px;
-    color: white;
-  }
-
-  .admin-header h2 {
-    font-size: 24px;
-    font-weight: 900;
-  }
-
-  .admin-nav {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding: 16px 16px 0;
-    margin-bottom: -1px;
-  }
-
-  .admin-nav::-webkit-scrollbar { display: none; }
-
-  .admin-tab {
-    flex-shrink: 0;
-    padding: 10px 18px;
-    border-radius: 12px 12px 0 0;
-    font-family: 'Nunito', sans-serif;
-    font-size: 13px;
-    font-weight: 800;
-    cursor: pointer;
-    background: rgba(255,255,255,0.1);
-    color: rgba(255,255,255,0.6);
-    border: none;
-    transition: all 0.15s;
-  }
-
-  .admin-tab.active {
-    background: var(--bg);
-    color: var(--text);
-  }
-
-  .admin-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 16px;
-  }
-
-  .summary-table {
-    background: white;
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    box-shadow: var(--shadow);
-    margin-bottom: 16px;
-  }
-
-  .summary-row {
-    display: flex;
-    align-items: center;
-    padding: 16px;
-    border-bottom: 1px solid var(--border);
-    gap: 12px;
-  }
-
-  .summary-row:last-child { border-bottom: none; }
-
-  .summary-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
-  .summary-name {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-    font-size: 15px;
-    flex: 1;
-  }
-
-  .summary-pct {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 900;
-    font-size: 18px;
-  }
-
-  .summary-trend {
-    font-size: 16px;
-    width: 24px;
-    text-align: center;
-  }
-
-  .prev-pct {
-    font-size: 12px;
-    color: #A0AEC0;
-    font-weight: 700;
-  }
-
-  /* ADMIN TASK EDITOR */
-  .child-section {
-    background: white;
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow);
-    margin-bottom: 16px;
-    overflow: hidden;
-  }
-
-  .child-section-header {
-    padding: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--border);
-    cursor: pointer;
-  }
-
-  .child-section-header h3 {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 900;
-    font-size: 16px;
-  }
-
-  .section-toggle { font-size: 20px; transition: transform 0.2s; }
-  .section-open .section-toggle { transform: rotate(180deg); }
-
-  .section-tasks { display: none; }
-  .section-open .section-tasks { display: block; }
-
-  .admin-task-row {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .admin-task-row:last-child { border-bottom: none; }
-
-  .admin-task-name {
-    flex: 1;
-    font-size: 14px;
-    font-weight: 600;
-    color: #2D3748;
-  }
-
-  .admin-task-name.inactive { color: #A0AEC0; text-decoration: line-through; }
-
-  .freq-selector {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    font-weight: 700;
-    color: #718096;
-  }
-
-  .freq-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    background: white;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-    font-size: 14px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.15s;
-  }
-
-  .freq-btn:active { background: var(--bg); }
-
-  .freq-val {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 900;
-    font-size: 15px;
-    color: var(--text);
-    min-width: 20px;
-    text-align: center;
-  }
-
-  .task-action-btns {
-    display: flex;
-    gap: 4px;
-  }
-
-  .icon-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    border: none;
-    background: #F7FAFC;
-    cursor: pointer;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.15s;
-  }
-
-  .icon-btn:active { background: #EDF2F7; }
-  .icon-btn.danger:active { background: #FFF5F5; }
-
-  /* ADD TASK FORM */
-  .add-task-form {
-    padding: 14px 16px;
-    border-top: 1px solid var(--border);
-    display: flex;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .add-task-input {
-    flex: 1;
-    padding: 10px 14px;
-    border: 2px solid var(--border);
-    border-radius: 10px;
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-
-  .add-task-input:focus { border-color: #667eea; }
-
-  .add-btn {
-    padding: 10px 16px;
-    border-radius: 10px;
-    border: none;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-    font-size: 13px;
-    color: white;
-    cursor: pointer;
-    transition: opacity 0.15s;
-    white-space: nowrap;
-  }
-
-  .add-btn:active { opacity: 0.85; }
-
-  /* HISTORY SCREEN */
-  #screen-history {
-    background: var(--bg);
-  }
-
-  .history-header {
-    padding: 52px 20px 20px;
-    color: white;
-  }
-
-  .week-card {
-    background: white;
-    border-radius: var(--radius-sm);
-    box-shadow: var(--shadow);
-    margin-bottom: 12px;
-    overflow: hidden;
-  }
-
-  .week-card-header {
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-  }
-
-  .week-card-title {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-    font-size: 14px;
-  }
-
-  .week-card-pct {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 900;
-    font-size: 20px;
-  }
-
-  .week-card-details {
-    display: none;
-    padding: 0 16px 14px;
-    border-top: 1px solid var(--border);
-  }
-
-  .week-card.expanded .week-card-details { display: block; }
-
-  .detail-task-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    font-size: 13px;
-  }
-
-  .detail-task-row:last-child { border-bottom: none; }
-
-  .detail-task-name { color: #4A5568; font-weight: 600; flex: 1; padding-right: 8px; }
-  .detail-task-score { font-family: 'Nunito', sans-serif; font-weight: 800; color: #2D3748; }
-
-  /* MODALS */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 200;
-    display: none;
-    align-items: flex-end;
-    justify-content: center;
-    backdrop-filter: blur(4px);
-  }
-
-  .modal-overlay.active { display: flex; }
-
-  .modal {
-    background: white;
-    border-radius: 24px 24px 0 0;
-    width: 100%;
-    max-width: 480px;
-    padding: 24px 24px 40px;
-    animation: slide-up 0.25s ease;
-  }
-
-  @keyframes slide-up {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-  }
-
-  .modal h3 {
-    font-family: 'Nunito', sans-serif;
-    font-size: 20px;
-    font-weight: 900;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-
-  .pin-inputs {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-
-  .pin-dot {
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: #E2E8F0;
-    transition: background 0.15s;
-  }
-
-  .pin-dot.filled { background: #667eea; }
-
-  .pin-pad {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    max-width: 260px;
-    margin: 0 auto;
-  }
-
-  .pin-key {
-    background: #F7FAFC;
-    border: none;
-    border-radius: 14px;
-    padding: 16px;
-    font-family: 'Nunito', sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-
-  .pin-key:active { background: #EDF2F7; }
-  .pin-key.delete { font-size: 16px; }
-
-  .pin-error {
-    text-align: center;
-    color: #E53E3E;
-    font-size: 13px;
-    font-weight: 700;
-    margin-top: 12px;
-    height: 20px;
-  }
-
-  /* CLOSE WEEK BTN */
-  .danger-btn {
-    width: 100%;
-    padding: 16px;
-    border-radius: 14px;
-    border: 2px solid #FEB2B2;
-    background: #FFF5F5;
-    color: #C53030;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background 0.15s;
-    margin-top: 8px;
-  }
-
-  .danger-btn:active { background: #FED7D7; }
-
-  /* CONFIRM DIALOG */
-  .confirm-modal .modal { border-radius: 24px; width: calc(100% - 48px); margin: 0 24px 24px; }
-
-  .confirm-btns {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-  }
-
-  .confirm-btns button {
-    flex: 1;
-    padding: 14px;
-    border-radius: 12px;
-    border: none;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-    font-size: 15px;
-    cursor: pointer;
-  }
-
-  .btn-cancel { background: #F7FAFC; color: #4A5568; }
-  .btn-confirm-danger { background: #FFF5F5; color: #C53030; }
-
-  /* EDIT TASK MODAL */
-  .edit-label {
-    font-size: 13px;
-    font-weight: 700;
-    color: #718096;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
-    margin-top: 16px;
-  }
-
-  .edit-input {
-    width: 100%;
-    padding: 12px 14px;
-    border: 2px solid var(--border);
-    border-radius: 12px;
-    font-family: 'Nunito Sans', sans-serif;
-    font-size: 15px;
-    outline: none;
-    transition: border-color 0.15s;
-  }
-
-  .edit-input:focus { border-color: #667eea; }
-
-  .freq-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-top: 8px;
-  }
-
-  .freq-btn-lg {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    border: 2px solid var(--border);
-    background: white;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 900;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .freq-display {
-    font-family: 'Nunito', sans-serif;
-    font-size: 24px;
-    font-weight: 900;
-    flex: 1;
-    text-align: center;
-  }
-
-  .freq-desc {
-    font-size: 12px;
-    color: #718096;
-    font-weight: 600;
-    flex: 2;
-  }
-
-  .save-btn {
-    width: 100%;
-    padding: 16px;
-    border-radius: 14px;
-    border: none;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 900;
-    font-size: 16px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: #A0AEC0;
-  }
-
-  .empty-state .emoji { font-size: 48px; margin-bottom: 12px; }
-  .empty-state p { font-weight: 600; font-size: 15px; }
-
-  /* PROGRESS BARS */
-  .progress-bar-wrap {
-    background: #EDF2F7;
-    border-radius: 50px;
-    height: 8px;
-    overflow: hidden;
-    margin-top: 6px;
-  }
-
-  .progress-bar-fill {
-    height: 100%;
-    border-radius: 50px;
-    transition: width 0.4s ease;
-  }
-
-  /* Utilities */
-  .mt8 { margin-top: 8px; }
-  .mb16 { margin-bottom: 16px; }
-  .text-center { text-align: center; }
-
-  .section-label {
-    font-family: 'Nunito', sans-serif;
-    font-size: 11px;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: rgba(255,255,255,0.7);
-    margin-bottom: 4px;
-  }
-
-  .admin-action-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-
-  .admin-action-btn {
-    flex: 1;
-    padding: 14px;
-    border-radius: 14px;
-    border: none;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800;
-    font-size: 14px;
-    cursor: pointer;
-    transition: opacity 0.15s;
-    background: white;
-    color: #2D3748;
-    box-shadow: var(--shadow);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-  }
-
-  .admin-action-btn:active { opacity: 0.85; }
-
-  /* SCROLLABLE CONTENT */
-  .scroll-content {
-    flex: 1;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 40px;
-  }
-
-  /* TASK COUNT BADGE */
-  .day-progress {
-    background: rgba(255,255,255,0.15);
-    border-radius: 20px;
-    padding: 10px 14px;
-    margin-top: 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .day-progress-text {
-    font-size: 13px;
-    font-weight: 700;
-    color: rgba(255,255,255,0.9);
-  }
-
-  .day-progress-pct {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 900;
-    font-size: 18px;
-    color: white;
-  }
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+:root {
+  --bg: #F5F6FA;
+  --card: #FFFFFF;
+  --text: #1C1E2E;
+  --text-muted: #8A8FA8;
+  --border: #EAECF4;
+  --radius: 24px;
+  --radius-sm: 16px;
+  --shadow: 0 2px 16px rgba(28,30,46,0.07);
+  --shadow-md: 0 8px 32px rgba(28,30,46,0.12);
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,h2,h3,.display { font-family: 'Baloo 2', cursive; }
+
+/* ── SCREENS ── */
+.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ── HOME ── */
+#screen-home { background: var(--bg); }
+
+.home-top {
+  padding: 56px 24px 28px;
+  background: linear-gradient(160deg, #1C1E2E 0%, #2D3154 100%);
+  border-radius: 0 0 32px 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.home-top::before {
+  content: '';
+  position: absolute;
+  top: -60px; right: -40px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+
+.home-top::after {
+  content: '';
+  position: absolute;
+  bottom: -30px; left: 20px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+}
+
+.home-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 8px;
+}
+
+.home-title {
+  font-size: 34px;
+  font-weight: 800;
+  color: white;
+  line-height: 1.05;
+  margin-bottom: 6px;
+}
+
+.home-week {
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.home-cards {
+  padding: 20px 20px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Child card — 1 column horizontal */
+.child-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 20px 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+}
+
+.child-card:active { transform: scale(0.985); box-shadow: var(--shadow-md); }
+
+.child-card-bar {
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 5px;
+  border-radius: 24px 0 0 24px;
+}
+
+.child-avatar {
+  width: 56px; height: 56px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Baloo 2', cursive;
+  font-size: 22px;
+  font-weight: 800;
+  color: white;
+  flex-shrink: 0;
+  letter-spacing: -1px;
+}
+
+.child-card-info { flex: 1; min-width: 0; }
+
+.child-card-name {
+  font-family: 'Baloo 2', cursive;
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.child-card-bar-wrap {
+  height: 7px;
+  background: var(--border);
+  border-radius: 50px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.child-card-bar-fill {
+  height: 100%;
+  border-radius: 50px;
+  transition: width 0.6s cubic-bezier(.4,0,.2,1);
+}
+
+.child-card-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.streak-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: #FFF3CD;
+  color: #92650A;
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.child-card-pct {
+  font-family: 'Baloo 2', cursive;
+  font-size: 26px;
+  font-weight: 800;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.admin-fab {
+  position: fixed;
+  bottom: 28px; right: 20px;
+  width: 50px; height: 50px;
+  border-radius: 50%;
+  background: #1C1E2E;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  font-size: 20px;
+  box-shadow: 0 4px 20px rgba(28,30,46,0.3);
+  transition: transform 0.15s;
+}
+.admin-fab:active { transform: scale(0.92); }
+
+/* ── CHILD SCREEN ── */
+#screen-child { background: var(--bg); }
+
+.child-header {
+  padding: 52px 20px 20px;
+  color: white;
+  position: relative;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 16px;
+}
+
+.child-header-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.child-header-name {
+  font-family: 'Baloo 2', cursive;
+  font-size: 30px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.child-header-date {
+  font-size: 13px;
+  opacity: 0.7;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.streak-badge {
+  background: rgba(255,255,255,0.18);
+  border-radius: 14px;
+  padding: 8px 12px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.streak-badge .streak-num {
+  font-family: 'Baloo 2', cursive;
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+  display: block;
+}
+
+.streak-badge .streak-label {
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0.75;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Compact stats row */
+.stats-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.stat-pill {
+  flex: 1;
+  background: rgba(255,255,255,0.15);
+  border-radius: 12px;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.stat-pill .stat-val {
+  font-family: 'Baloo 2', cursive;
+  font-size: 20px;
+  font-weight: 800;
+  display: block;
+  line-height: 1;
+}
+
+.stat-pill .stat-lbl {
+  font-size: 10px;
+  font-weight: 600;
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+  display: block;
+}
+
+/* ── DAY TABS ── */
+.day-tabs-wrap {
+  background: var(--card);
+  padding: 12px 16px 10px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.day-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+.day-tabs::-webkit-scrollbar { display: none; }
+
+.day-tab {
+  flex-shrink: 0;
+  min-width: 48px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  font-family: 'Baloo 2', cursive;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: var(--bg);
+  color: var(--text-muted);
+  border: none;
+  text-align: center;
+}
+
+.day-tab .tab-day { display: block; font-size: 9px; text-transform: uppercase; letter-spacing: 0.8px; }
+.day-tab .tab-num { display: block; font-size: 16px; font-weight: 800; margin-top: 1px; }
+
+.day-tab.active { color: white; }
+.day-tab.today-indicator:not(.active) { outline: 2px solid; outline-offset: -2px; background: transparent; }
+
+/* ── TASKS ── */
+.scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 16px 16px 48px;
+}
+
+.section-heading {
+  font-family: 'Baloo 2', cursive;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  margin-top: 4px;
+}
+
+.task-item {
+  background: var(--card);
+  border-radius: 18px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  min-height: 72px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.12s ease, opacity 0.2s;
+  border: 1.5px solid var(--border);
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.task-item:active { transform: scale(0.985); }
+.task-item.completed { opacity: 0.6; }
+.task-item.readonly { cursor: default; }
+
+.task-check-zone {
+  width: 72px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+}
+
+.task-check {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 2.5px solid #D0D5E8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(.4,0,.2,1);
+  font-size: 15px;
+  color: white;
+  font-weight: 700;
+}
+
+.task-item.completed .task-check {
+  border-color: transparent;
+  transform: scale(1.05);
+}
+
+.task-body {
+  flex: 1;
+  padding: 14px 16px 14px 0;
+}
+
+.task-name {
+  font-family: 'Baloo 2', cursive;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+  margin-bottom: 5px;
+}
+
+.task-item.completed .task-name {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.task-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.badge-freq {
+  background: var(--bg);
+  color: var(--text-muted);
+}
+
+.badge-count {
+  background: var(--bg);
+  color: var(--text-muted);
+}
+
+.badge-done {
+  color: white;
+}
+
+/* ── READONLY BANNER ── */
+.readonly-banner {
+  background: #FEF9EC;
+  color: #9A6B00;
+  text-align: center;
+  padding: 10px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  border-bottom: 1px solid #FCE8A0;
+}
+
+/* ── CONFETTI ── */
+.confetti-piece {
+  position: fixed;
+  width: 9px; height: 9px;
+  border-radius: 3px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: cffall 0.9s ease-out forwards;
+}
+@keyframes cffall {
+  0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+  100% { transform: translateY(90px) rotate(400deg) scale(0.2); opacity: 0; }
+}
+
+/* ── STREAK ANIMATION ── */
+.streak-toast {
+  position: fixed;
+  top: 80px; left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background: linear-gradient(135deg, #FF6B35, #FF9500);
+  color: white;
+  border-radius: 50px;
+  padding: 12px 24px;
+  font-family: 'Baloo 2', cursive;
+  font-size: 16px;
+  font-weight: 800;
+  z-index: 9998;
+  opacity: 0;
+  animation: toast-in 2.5s ease forwards;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(255,107,53,0.4);
+}
+@keyframes toast-in {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  15%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+  75%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+}
+
+/* ── HISTORY BTN ── */
+.history-btn {
+  width: 100%;
+  padding: 16px;
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  border: 1.5px solid var(--border);
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-muted);
+  transition: background 0.15s;
+  margin-top: 8px;
+}
+.history-btn:active { background: var(--bg); }
+
+/* ── ADMIN ── */
+#screen-admin { background: var(--bg); }
+
+.admin-header {
+  background: linear-gradient(135deg, #1C1E2E, #2D3154);
+  padding: 52px 20px 0;
+  color: white;
+}
+
+.admin-header h2 {
+  font-size: 26px;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.admin-tabs::-webkit-scrollbar { display: none; }
+
+.admin-tab {
+  flex-shrink: 0;
+  padding: 10px 18px;
+  border-radius: 12px 12px 0 0;
+  font-family: 'Baloo 2', cursive;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.5);
+  border: none;
+  transition: all 0.15s;
+}
+.admin-tab.active {
+  background: var(--bg);
+  color: var(--text);
+}
+
+.admin-pane {
+  display: none;
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  padding-bottom: 48px;
+}
+.admin-pane.active { display: block; }
+
+/* Summary table */
+.summary-card {
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 14px;
+  border: 1.5px solid var(--border);
+}
+
+.summary-row {
+  display: flex;
+  align-items: center;
+  padding: 16px 18px;
+  gap: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.summary-row:last-child { border-bottom: none; }
+
+.summary-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.summary-name { font-family: 'Baloo 2', cursive; font-weight: 800; font-size: 16px; flex: 1; }
+.summary-streak { font-size: 13px; }
+.summary-trend { font-size: 16px; width: 22px; text-align: center; }
+.summary-pct { font-family: 'Baloo 2', cursive; font-weight: 900; font-size: 20px; }
+
+.danger-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  border: 2px solid #FECACA;
+  background: #FFF5F5;
+  color: #B91C1C;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 6px;
+  transition: background 0.15s;
+}
+.danger-btn:active { background: #FEE2E2; }
+
+/* Admin task editor */
+.child-section {
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  margin-bottom: 14px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+}
+
+.child-section-header {
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  border-bottom: 1px solid var(--border);
+}
+
+.child-section-header h3 {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.section-toggle { font-size: 18px; transition: transform 0.2s; color: var(--text-muted); }
+.section-open .section-toggle { transform: rotate(180deg); }
+.section-tasks { display: none; }
+.section-open .section-tasks { display: block; }
+
+.admin-task-row {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.admin-task-row:last-of-type { border-bottom: none; }
+
+.admin-task-name {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.3;
+}
+.admin-task-name.inactive { color: var(--text-muted); text-decoration: line-through; }
+
+.freq-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.freq-btn {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Baloo 2', cursive;
+  transition: background 0.12s;
+}
+.freq-btn:active { background: var(--border); }
+
+.freq-val {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 900;
+  font-size: 16px;
+  min-width: 18px;
+  text-align: center;
+}
+
+.icon-btn {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: var(--bg);
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.12s;
+  flex-shrink: 0;
+}
+.icon-btn:active { background: var(--border); }
+
+.add-task-row {
+  padding: 12px 16px;
+  display: flex;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.add-input {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  background: var(--bg);
+  transition: border-color 0.15s;
+  color: var(--text);
+}
+.add-input:focus { border-color: #667eea; background: white; }
+
+.add-btn {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: none;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 13px;
+  color: white;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+.add-btn:active { opacity: 0.85; }
+
+/* ── HISTORY SCREEN ── */
+#screen-history { background: var(--bg); }
+
+.week-card {
+  background: var(--card);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow);
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+}
+
+.week-card-header {
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.week-card-title {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.week-card-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+.week-card-pct {
+  font-family: 'Baloo 2', cursive;
+  font-weight: 900;
+  font-size: 22px;
+}
+
+.week-card-details {
+  display: none;
+  padding: 0 18px 14px;
+  border-top: 1px solid var(--border);
+}
+.week-card.expanded .week-card-details { display: block; }
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-name { color: var(--text); font-weight: 500; flex: 1; padding-right: 10px; line-height: 1.3; }
+.detail-score { font-family: 'Baloo 2', cursive; font-weight: 800; }
+
+/* ── MODALS ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 200;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  backdrop-filter: blur(6px);
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: var(--card);
+  border-radius: 28px 28px 0 0;
+  width: 100%;
+  max-width: 500px;
+  padding: 28px 24px 44px;
+  animation: slideUp 0.25s cubic-bezier(.4,0,.2,1);
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+.modal h3 {
+  font-family: 'Baloo 2', cursive;
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* PIN */
+.pin-dots {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.pin-dot {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.15s, transform 0.15s;
+}
+.pin-dot.filled { background: #667eea; transform: scale(1.15); }
+
+.pin-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  max-width: 260px;
+  margin: 0 auto;
+}
+
+.pin-key {
+  background: var(--bg);
+  border: none;
+  border-radius: 16px;
+  padding: 18px;
+  font-family: 'Baloo 2', cursive;
+  font-size: 22px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.12s;
+  color: var(--text);
+}
+.pin-key:active { background: var(--border); }
+.pin-key.del { font-size: 16px; }
+
+.pin-error {
+  text-align: center;
+  color: #EF4444;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 14px;
+  height: 20px;
+}
+
+/* CONFIRM */
+.confirm-overlay { align-items: center; justify-content: center; }
+.confirm-modal {
+  border-radius: 24px;
+  width: calc(100% - 48px);
+  max-width: 380px;
+  padding: 28px 24px;
+  animation: fadeScale 0.2s ease;
+}
+@keyframes fadeScale {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+.confirm-body { text-align: center; color: var(--text-muted); font-size: 14px; font-weight: 500; line-height: 1.5; }
+.confirm-btns { display: flex; gap: 10px; margin-top: 22px; }
+.confirm-btns button {
+  flex: 1; padding: 14px;
+  border-radius: 14px; border: none;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700; font-size: 15px;
+  cursor: pointer; transition: opacity 0.15s;
+}
+.btn-cancel { background: var(--bg); color: var(--text-muted); }
+.btn-danger  { background: #FEE2E2; color: #B91C1C; }
+
+/* EDIT MODAL */
+.edit-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  margin-top: 18px;
+}
+.edit-input {
+  width: 100%;
+  padding: 13px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.15s;
+  color: var(--text);
+}
+.edit-input:focus { border-color: #667eea; }
+
+.freq-row-edit {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 8px;
+  background: var(--bg);
+  border-radius: 14px;
+  padding: 12px 16px;
+}
+
+.freq-btn-lg {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--card);
+  font-family: 'Baloo 2', cursive;
+  font-weight: 900;
+  font-size: 22px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text);
+}
+
+.freq-display-lg {
+  font-family: 'Baloo 2', cursive;
+  font-size: 28px;
+  font-weight: 900;
+  flex: 1;
+  text-align: center;
+}
+
+.freq-lbl {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 500;
+  flex: 2;
+}
+
+.save-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-family: 'Baloo 2', cursive;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 22px;
+  transition: opacity 0.15s;
+}
+.save-btn:active { opacity: 0.88; }
+
+.cancel-btn {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: var(--bg);
+  color: var(--text-muted);
+  font-family: 'Baloo 2', cursive;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+}
+.empty-state .emoji { font-size: 52px; margin-bottom: 14px; display: block; }
+.empty-state p { font-weight: 600; font-size: 15px; }
+
+/* Loading */
+#loading-screen {
+  position: fixed; inset: 0;
+  background: linear-gradient(160deg, #1C1E2E, #2D3154);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  transition: opacity 0.4s;
+}
+#loading-screen h1 {
+  font-size: 36px;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 8px;
+}
+#loading-screen p {
+  color: rgba(255,255,255,0.5);
+  font-size: 14px;
+  font-weight: 500;
+}
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid rgba(255,255,255,0.15);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 20px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.section-label-admin {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  margin-top: 4px;
+  padding: 0 2px;
+}
 </style>
 </head>
 <body>
 
-<!-- HOME SCREEN -->
-<div id="screen-home" class="screen active">
-  <div class="home-header">
-    <div class="greeting">¡Bienvenidos! 👋</div>
-    <h1>Tareas<br>de Casa</h1>
-    <div class="week-label" id="home-week-label"></div>
+<!-- LOADING -->
+<div id="loading-screen">
+  <div class="spinner"></div>
+  <h1>🏠 Tareas</h1>
+  <p>Cargando datos…</p>
+</div>
+
+<!-- HOME -->
+<div id="screen-home" class="screen">
+  <div class="home-top">
+    <div class="home-eyebrow">Esta semana</div>
+    <h1 class="home-title">Tareas<br>de Casa 🏠</h1>
+    <div class="home-week" id="home-week-label"></div>
   </div>
-  <div class="cards-container" id="cards-container"></div>
+  <div class="home-cards" id="home-cards"></div>
   <button class="admin-fab" onclick="openAdminPin()">⚙️</button>
 </div>
 
-<!-- CHILD SCREEN -->
+<!-- CHILD -->
 <div id="screen-child" class="screen">
   <div class="child-header" id="child-header">
     <button class="back-btn" onclick="goHome()">← Inicio</button>
-    <div class="child-header-name" id="child-header-name"></div>
-    <div class="child-header-date" id="child-header-date"></div>
-    <div class="day-progress">
-      <span class="day-progress-text">Progreso de hoy</span>
-      <span class="day-progress-pct" id="day-progress-pct">0%</span>
+    <div class="child-header-row">
+      <div>
+        <div class="child-header-name" id="child-name"></div>
+        <div class="child-header-date" id="child-date"></div>
+      </div>
+      <div class="streak-badge" id="streak-badge">
+        <span class="streak-num" id="streak-num">0</span>
+        <span class="streak-label">🔥 racha</span>
+      </div>
     </div>
-    <div class="section-label" style="margin-top:10px;">Semana completa</div>
-    <div class="weekly-progress-bar">
-      <div class="weekly-progress-fill" id="weekly-progress-fill"></div>
-    </div>
-    <div class="weekly-pct-label">
-      <span id="weekly-tasks-label">0 de 0 tareas</span>
-      <span id="weekly-pct-text">0%</span>
+    <div class="stats-row">
+      <div class="stat-pill">
+        <span class="stat-val" id="stat-day-pct">0%</span>
+        <span class="stat-lbl">Hoy</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-val" id="stat-week-pct">0%</span>
+        <span class="stat-lbl">Semana</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-val" id="stat-checks">0/0</span>
+        <span class="stat-lbl">Cumplidos</span>
+      </div>
     </div>
   </div>
-
   <div class="day-tabs-wrap">
     <div class="day-tabs" id="day-tabs"></div>
   </div>
-
+  <div id="readonly-banner" class="readonly-banner" style="display:none">
+    📅 Día anterior — puedes marcar si olvidaste algo
+  </div>
   <div class="scroll-content">
-    <div id="readonly-banner" class="readonly-banner" style="display:none;">
-      📅 Viendo día anterior — solo lectura
-    </div>
-    <div class="tasks-section">
-      <h3 id="tasks-section-label">Tareas del día</h3>
-      <div id="tasks-list"></div>
-    </div>
-    <button class="history-btn" id="child-history-btn">
-      📊 Ver historial de semanas
-    </button>
+    <div class="section-heading" id="tasks-heading">Tareas del día</div>
+    <div id="tasks-list"></div>
+    <button class="history-btn" id="history-btn">📊 Ver historial de semanas</button>
   </div>
 </div>
 
-<!-- ADMIN SCREEN -->
+<!-- ADMIN -->
 <div id="screen-admin" class="screen">
   <div class="admin-header">
     <button class="back-btn" onclick="goHome()">← Inicio</button>
-    <h2>Panel de Admin</h2>
-    <div style="display:flex; gap:8px; margin-top:8px;">
-      <button class="admin-tab active" onclick="switchAdminTab('summary', this)">Resumen</button>
-      <button class="admin-tab" onclick="switchAdminTab('tasks', this)">Tareas</button>
-      <button class="admin-tab" onclick="switchAdminTab('history', this)">Historial</button>
+    <h2>Panel Admin ⚙️</h2>
+    <div class="admin-tabs">
+      <button class="admin-tab active" onclick="switchAdminTab('summary',this)">Resumen</button>
+      <button class="admin-tab" onclick="switchAdminTab('tasks',this)">Tareas</button>
+      <button class="admin-tab" onclick="switchAdminTab('history',this)">Historial</button>
     </div>
   </div>
-
-  <!-- SUMMARY TAB -->
-  <div id="admin-summary" class="admin-content scroll-content">
-    <div class="summary-table" id="admin-summary-table"></div>
-    <button class="danger-btn" onclick="confirmCloseWeek()">
-      🔒 Cerrar semana actual
-    </button>
+  <div id="pane-summary" class="admin-pane active">
+    <div class="section-label-admin">Semana actual vs anterior</div>
+    <div class="summary-card" id="summary-table"></div>
+    <button class="danger-btn" onclick="confirmCloseWeek()">🔒 Cerrar semana y guardar historial</button>
   </div>
-
-  <!-- TASKS TAB -->
-  <div id="admin-tasks" class="admin-content scroll-content" style="display:none;">
+  <div id="pane-tasks" class="admin-pane">
     <div id="admin-tasks-list"></div>
   </div>
-
-  <!-- HISTORY TAB -->
-  <div id="admin-history" class="admin-content scroll-content" style="display:none;">
+  <div id="pane-history" class="admin-pane">
     <div id="admin-history-list"></div>
   </div>
 </div>
 
-<!-- HISTORY SCREEN (child view) -->
+<!-- HISTORY -->
 <div id="screen-history" class="screen">
-  <div class="child-header" id="history-child-header">
-    <button class="back-btn" id="history-back-btn">← Volver</button>
-    <div class="child-header-name" id="history-child-name"></div>
+  <div class="child-header" id="hist-header">
+    <button class="back-btn" id="hist-back">← Volver</button>
+    <div class="child-header-name" id="hist-title"></div>
     <div class="child-header-date">Historial de semanas</div>
   </div>
-  <div class="scroll-content" style="padding:16px;">
-    <div id="history-list"></div>
+  <div class="scroll-content" style="padding-top:16px">
+    <div id="hist-list"></div>
   </div>
 </div>
 
 <!-- PIN MODAL -->
-<div class="modal-overlay" id="pin-modal">
+<div class="modal-overlay" id="pin-overlay">
   <div class="modal">
     <h3>🔐 Acceso Admin</h3>
-    <div class="pin-inputs" id="pin-dots">
-      <div class="pin-dot" id="dot-0"></div>
-      <div class="pin-dot" id="dot-1"></div>
-      <div class="pin-dot" id="dot-2"></div>
-      <div class="pin-dot" id="dot-3"></div>
+    <div class="pin-dots" id="pin-dots">
+      <div class="pin-dot" id="pd0"></div>
+      <div class="pin-dot" id="pd1"></div>
+      <div class="pin-dot" id="pd2"></div>
+      <div class="pin-dot" id="pd3"></div>
     </div>
     <div class="pin-pad">
       <button class="pin-key" onclick="pinKey('1')">1</button>
@@ -1158,567 +1179,611 @@
       <button class="pin-key" onclick="pinKey('7')">7</button>
       <button class="pin-key" onclick="pinKey('8')">8</button>
       <button class="pin-key" onclick="pinKey('9')">9</button>
-      <button class="pin-key" onclick="closePinModal()" style="font-size:13px;">✕</button>
+      <button class="pin-key" onclick="closePinModal()" style="font-size:14px">✕</button>
       <button class="pin-key" onclick="pinKey('0')">0</button>
-      <button class="pin-key delete" onclick="pinDelete()">⌫</button>
+      <button class="pin-key del" onclick="pinDel()">⌫</button>
     </div>
     <div class="pin-error" id="pin-error"></div>
   </div>
 </div>
 
 <!-- CONFIRM MODAL -->
-<div class="modal-overlay confirm-modal" id="confirm-modal">
-  <div class="modal">
-    <h3 id="confirm-title">¿Estás seguro?</h3>
-    <p id="confirm-body" style="text-align:center; color:#718096; font-size:14px; font-weight:600;"></p>
+<div class="modal-overlay confirm-overlay" id="confirm-overlay">
+  <div class="modal confirm-modal">
+    <h3 id="confirm-title">¿Confirmar?</h3>
+    <p class="confirm-body" id="confirm-body"></p>
     <div class="confirm-btns">
-      <button class="btn-cancel" onclick="closeConfirmModal()">Cancelar</button>
-      <button class="btn-confirm-danger" id="confirm-ok-btn">Confirmar</button>
+      <button class="btn-cancel" onclick="closeConfirm()">Cancelar</button>
+      <button class="btn-danger" id="confirm-ok">Confirmar</button>
     </div>
   </div>
 </div>
 
-<!-- EDIT TASK MODAL -->
-<div class="modal-overlay" id="edit-modal">
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="edit-overlay">
   <div class="modal">
     <h3>✏️ Editar tarea</h3>
     <div class="edit-label">Nombre</div>
     <input class="edit-input" id="edit-name" type="text" placeholder="Nombre de la tarea" />
-    <div class="edit-label">Frecuencia semanal requerida</div>
-    <div class="freq-row">
-      <button class="freq-btn-lg" onclick="editFreqChange(-1)">−</button>
-      <div class="freq-display" id="edit-freq-val">7</div>
-      <button class="freq-btn-lg" onclick="editFreqChange(1)">+</button>
-      <div class="freq-desc" id="edit-freq-desc"></div>
+    <div class="edit-label">Veces por semana requeridas</div>
+    <div class="freq-row-edit">
+      <button class="freq-btn-lg" onclick="editFreqDelta(-1)">−</button>
+      <div class="freq-display-lg" id="edit-freq-num">7</div>
+      <button class="freq-btn-lg" onclick="editFreqDelta(1)">+</button>
+      <div class="freq-lbl" id="edit-freq-lbl">todos los días</div>
     </div>
-    <button class="save-btn" onclick="saveEditTask()">Guardar cambios</button>
-    <button class="btn-cancel" style="width:100%; padding:14px; border-radius:12px; margin-top:8px; border:none; cursor:pointer; font-family:'Nunito',sans-serif; font-weight:800; font-size:15px;" onclick="closeEditModal()">Cancelar</button>
+    <button class="save-btn" onclick="saveEdit()">Guardar</button>
+    <button class="cancel-btn" onclick="closeEdit()">Cancelar</button>
   </div>
 </div>
 
-<script>
-// ==================== DATA ====================
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, get, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-const DEFAULT_DATA = {
-  children: [
-    {
-      id: 'gianfranco',
-      name: 'Gianfranco',
-      color: '#3B82F6',
-      emoji: 'G',
-      tasks: [
-        { id: 't1', name: 'Mantener tu cuarto limpio y recogido', freq: 7, active: true },
-        { id: 't2', name: 'Tender tu cama en las mañanas', freq: 7, active: true },
-        { id: 't3', name: 'Pasear a Mora', freq: 3, active: true },
-        { id: 't4', name: 'Darle de comer a Mora', freq: 7, active: true },
-        { id: 't5', name: 'Ayudar en casa en general', freq: 7, active: true },
-        { id: 't6', name: 'Vaciar los botes de basura y cambiar bolsas', freq: 2, active: true },
-        { id: 't7', name: 'Ayudar a lavar los platos sucios', freq: 7, active: true },
-        { id: 't8', name: 'Barrer y limpiar la banqueta (1 vez en fin de semana)', freq: 1, active: true },
-      ]
-    },
-    {
-      id: 'natasha',
-      name: 'Natasha',
-      color: '#EC4899',
-      emoji: 'N',
-      tasks: [
-        { id: 't1', name: 'Levantada y activa a más tardar 7AM', freq: 7, active: true },
-        { id: 't2', name: 'Sacar a Mora al patio a primera hora', freq: 7, active: true },
-        { id: 't3', name: 'Acomodar tu cuarto y tender tu cama', freq: 7, active: true },
-        { id: 't4', name: 'Limpiar y ordenar el refrigerador', freq: 2, active: true },
-        { id: 't5', name: 'Ayudar a mamá en la mañana', freq: 7, active: true },
-        { id: 't6', name: 'Levantar las cacas de Mora del patio', freq: 3, active: true },
-        { id: 't7', name: 'Limpiar el patio completo', freq: 2, active: true },
-        { id: 't8', name: 'Ayudar en casa de forma general', freq: 7, active: true },
-        { id: 't9', name: 'Darle de cenar a Mora', freq: 7, active: true },
-        { id: 't10', name: 'Lavar el plato de Mora', freq: 3, active: true },
-        { id: 't11', name: 'Lavar los platos que uses', freq: 7, active: true },
-        { id: 't12', name: 'Sacar a Mora a pasear', freq: 3, active: true },
-        { id: 't13', name: 'Regar el jardín', freq: 3, active: true },
-        { id: 't14', name: 'Barrer arriba de tu cuarto cuando llueva', freq: 1, active: true },
-      ]
-    },
-    {
-      id: 'sebastian',
-      name: 'Sebastián',
-      color: '#10B981',
-      emoji: 'S',
-      tasks: [
-        { id: 't1', name: 'Levantado y activo a más tardar 7AM', freq: 7, active: true },
-        { id: 't2', name: 'Acomodar tu cuarto y tender tu cama', freq: 7, active: true },
-        { id: 't3', name: 'Tratamiento dermatológico mañana y noche', freq: 7, active: true },
-        { id: 't4', name: 'Ayudar en casa de forma general', freq: 7, active: true },
-        { id: 't5', name: 'Lavarte los dientes 2 veces al día', freq: 7, active: true },
-        { id: 't6', name: 'Mantener limpios tus tenis y vestimenta', freq: 3, active: true },
-        { id: 't7', name: 'Sacar a pasear a Mora', freq: 3, active: true },
-        { id: 't8', name: 'Limpiar y acomodar tu equipo de baseball', freq: 2, active: true },
-        { id: 't9', name: 'Ir a tu entrenamiento de baseball', freq: 3, active: true },
-        { id: 't10', name: 'Hacer rutina de bateo en casa', freq: 5, active: true },
-        { id: 't11', name: 'Hacer rutina de ejercicio en casa', freq: 5, active: true },
-        { id: 't12', name: 'Hacer 30 minutos de inglés al día', freq: 7, active: true },
-        { id: 't13', name: 'Ir a curso en la Org', freq: 1, active: true },
-        { id: 't14', name: 'Tomar tus cursos de programación y animación', freq: 5, active: true },
-        { id: 't15', name: 'Trabajar en proyectos de tus cursos', freq: 5, active: true },
-        { id: 't16', name: 'Dormirte a tiempo (mínimo 9 horas)', freq: 7, active: true },
-      ]
-    },
-    {
-      id: 'marifer',
-      name: 'Marifer',
-      color: '#F97316',
-      emoji: 'M',
-      tasks: [
-        { id: 't1', name: 'Levantada y activa a más tardar 7AM', freq: 7, active: true },
-        { id: 't2', name: 'Bañarse', freq: 7, active: true },
-        { id: 't3', name: 'Lavarse los dientes 2 veces al día', freq: 7, active: true },
-        { id: 't4', name: 'Ir a la escuela', freq: 5, active: true },
-        { id: 't5', name: 'Ballet', freq: 2, active: true },
-        { id: 't6', name: 'Ayudar a recoger la casa', freq: 7, active: true },
-        { id: 't7', name: 'No dejar ropa, juguetes o zapatos tirados', freq: 7, active: true },
-        { id: 't8', name: 'Dormirse a tiempo', freq: 7, active: true },
-        { id: 't9', name: 'Hacer tarea o ejercicio escolar', freq: 5, active: true },
-      ]
-    }
-  ]
+// ══════════════════════════════════════════
+//  FIREBASE CONFIG — replace with your URL
+// ══════════════════════════════════════════
+const firebaseConfig = {
+  databaseURL: "https://tareas-familia-55436-default-rtdb.firebaseio.com"
 };
 
-// ==================== STATE ====================
+const app = initializeApp(firebaseConfig);
+const db  = getDatabase(app);
 
-let appData = null;
-let checksData = {};    // { "weekKey:childId:taskId:dayOfWeek": count }
-let historyData = [];   // Array of { weekKey, weekStart, weekEnd, snapshots: {childId: {pct, tasks}} }
-
-let currentChild = null;
-let currentDayIndex = 0; // 0=Mon ... 6=Sun
-let editTarget = null; // {childId, taskIndex}
-let editFreqTemp = 7;
-let confirmCallback = null;
-let pinBuffer = '';
-
-const DAYS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-const DAYS_FULL = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-
-// ==================== STORAGE ====================
-
-function loadData() {
-  try {
-    const saved = localStorage.getItem('tasksApp_data');
-    appData = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DATA));
-    checksData = JSON.parse(localStorage.getItem('tasksApp_checks') || '{}');
-    historyData = JSON.parse(localStorage.getItem('tasksApp_history') || '[]');
-    
-    // Ensure all children have tasks with proper structure
-    appData.children.forEach(child => {
-      child.tasks.forEach(task => {
-        if (task.active === undefined) task.active = true;
-      });
-    });
-  } catch(e) {
-    appData = JSON.parse(JSON.stringify(DEFAULT_DATA));
-    checksData = {};
-    historyData = [];
+// ══════════════════════════════════════════
+//  DEFAULT DATA
+// ══════════════════════════════════════════
+const DEFAULT_CHILDREN = [
+  {
+    id: 'gianfranco', name: 'Gianfranco', color: '#3B82F6', emoji: 'GF',
+    tasks: [
+      { id: 'g1', name: 'Limpiar y recoger tu cuarto', freq: 7, active: true },
+      { id: 'g2', name: 'Tender tu cama en las mañanas', freq: 7, active: true },
+      { id: 'g3', name: 'Pasear a Mora', freq: 3, active: true },
+      { id: 'g4', name: 'Darle de comer a Mora', freq: 7, active: true },
+      { id: 'g5', name: 'Ayudar en casa en general', freq: 7, active: true },
+      { id: 'g6', name: 'Vaciar los botes de basura y cambiar bolsas', freq: 2, active: true },
+      { id: 'g7', name: 'Ayudar a lavar los platos sucios', freq: 7, active: true },
+      { id: 'g8', name: 'Barrer y limpiar la banqueta (fin de semana)', freq: 1, active: true },
+    ]
+  },
+  {
+    id: 'natasha', name: 'Natasha', color: '#EC4899', emoji: 'N',
+    tasks: [
+      { id: 'n1',  name: 'Levantada y activa a más tardar 7AM', freq: 7, active: true },
+      { id: 'n2',  name: 'Sacar a Mora al patio a primera hora', freq: 7, active: true },
+      { id: 'n3',  name: 'Acomodar tu cuarto y tender tu cama', freq: 7, active: true },
+      { id: 'n4',  name: 'Limpiar y ordenar el refrigerador', freq: 2, active: true },
+      { id: 'n5',  name: 'Ayudar a mamá en la mañana', freq: 7, active: true },
+      { id: 'n6',  name: 'Levantar las cacas de Mora del patio', freq: 3, active: true },
+      { id: 'n7',  name: 'Limpiar el patio completo', freq: 2, active: true },
+      { id: 'n8',  name: 'Ayudar en casa de forma general', freq: 7, active: true },
+      { id: 'n9',  name: 'Darle de cenar a Mora', freq: 7, active: true },
+      { id: 'n10', name: 'Lavar el plato de Mora', freq: 3, active: true },
+      { id: 'n11', name: 'Lavar los platos que uses', freq: 7, active: true },
+      { id: 'n12', name: 'Sacar a Mora a pasear', freq: 3, active: true },
+      { id: 'n13', name: 'Regar el jardín', freq: 3, active: true },
+      { id: 'n14', name: 'Barrer arriba de tu cuarto cuando llueva', freq: 1, active: true },
+    ]
+  },
+  {
+    id: 'sebastian', name: 'Sebastián', color: '#10B981', emoji: 'S',
+    tasks: [
+      { id: 's1',  name: 'Levantado y activo a más tardar 7AM', freq: 7, active: true },
+      { id: 's2',  name: 'Acomodar tu cuarto incluyendo tender tu cama', freq: 7, active: true },
+      { id: 's3',  name: 'Tratamiento dermatológico mañana y noche', freq: 7, active: true },
+      { id: 's4',  name: 'Ayudar en casa de forma general', freq: 7, active: true },
+      { id: 's5',  name: 'Lavarte los dientes 2 veces al día', freq: 7, active: true },
+      { id: 's6',  name: 'Mantener limpios tus tenis y vestimenta', freq: 3, active: true },
+      { id: 's7',  name: 'Sacar a pasear a Mora', freq: 3, active: true },
+      { id: 's8',  name: 'Limpiar y acomodar tu equipo de baseball', freq: 2, active: true },
+      { id: 's9',  name: 'Ir a tu entrenamiento de baseball', freq: 3, active: true },
+      { id: 's10', name: 'Hacer rutina de bateo en casa (Roomie)', freq: 5, active: true },
+      { id: 's11', name: 'Hacer rutina de ejercicio en casa', freq: 5, active: true },
+      { id: 's12', name: 'Hacer 30 minutos de inglés al día', freq: 7, active: true },
+      { id: 's13', name: 'Ir a curso en la Org', freq: 1, active: true },
+      { id: 's14', name: 'Tomar cursos de programación y animación', freq: 5, active: true },
+      { id: 's15', name: 'Trabajar en proyectos de tus cursos', freq: 5, active: true },
+      { id: 's16', name: 'Dormirte a tiempo (mínimo 9 horas)', freq: 7, active: true },
+    ]
+  },
+  {
+    id: 'marifer', name: 'Marifer', color: '#F97316', emoji: 'M',
+    tasks: [
+      { id: 'm1', name: 'Levantada y activa a más tardar 7AM', freq: 7, active: true },
+      { id: 'm2', name: 'Bañarse', freq: 7, active: true },
+      { id: 'm3', name: 'Lavarse los dientes 2 veces al día', freq: 7, active: true },
+      { id: 'm4', name: 'Ir a la escuela', freq: 5, active: true },
+      { id: 'm5', name: 'Ballet', freq: 2, active: true },
+      { id: 'm6', name: 'Ayudar a recoger la casa', freq: 7, active: true },
+      { id: 'm7', name: 'No dejar ropa, juguetes o zapatos tirados', freq: 7, active: true },
+      { id: 'm8', name: 'Dormirse a tiempo todos los días', freq: 7, active: true },
+      { id: 'm9', name: 'Hacer tarea o ejercicio escolar', freq: 5, active: true },
+    ]
   }
-}
+];
 
-function saveData() {
-  localStorage.setItem('tasksApp_data', JSON.stringify(appData));
-  localStorage.setItem('tasksApp_checks', JSON.stringify(checksData));
-  localStorage.setItem('tasksApp_history', JSON.stringify(historyData));
-}
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let children   = [];
+let checks     = {};   // { weekKey: { childId: { taskId: { 0:1, 1:1, ... } } } }
+let history    = [];
+let currentChild = null;
+let currentDayIdx = 0;
+let editTarget   = null;
+let editFreqTmp  = 7;
+let confirmCb    = null;
+let pinBuf       = '';
 
-// ==================== DATE UTILS ====================
+const DAYS      = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+const DAYS_FULL = ['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'];
 
-function getWeekStart(date) {
+// ══════════════════════════════════════════
+//  DATE HELPERS
+// ══════════════════════════════════════════
+function weekStart(date) {
   const d = new Date(date);
-  const day = d.getDay(); // 0=Sun
-  const diff = day === 0 ? -6 : 1 - day; // Monday
-  d.setDate(d.getDate() + diff);
+  const day = d.getDay();
+  d.setDate(d.getDate() - (day === 0 ? 6 : day - 1));
   d.setHours(0,0,0,0);
   return d;
 }
 
-function getWeekKey(date) {
-  const ws = getWeekStart(date);
-  return ws.toISOString().split('T')[0];
+function weekKey(date) {
+  return weekStart(date).toISOString().split('T')[0];
 }
 
-function getDayOfWeekIndex(date) {
-  // 0=Mon, 6=Sun
+function dayIdx(date) {
   const d = date.getDay();
   return d === 0 ? 6 : d - 1;
 }
 
-function getWeekDates(weekStart) {
-  const dates = [];
-  for(let i = 0; i < 7; i++) {
-    const d = new Date(weekStart);
+function weekDates(ws) {
+  return Array.from({length:7}, (_,i) => {
+    const d = new Date(ws);
     d.setDate(d.getDate() + i);
-    dates.push(d);
-  }
-  return dates;
-}
-
-function formatDate(date) {
-  return date.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' });
-}
-
-function formatShortDate(date) {
-  return date.toLocaleDateString('es-MX', { day: 'numeric', month: 'short' });
-}
-
-function formatWeekLabel(weekStart) {
-  const end = new Date(weekStart);
-  end.setDate(end.getDate() + 6);
-  const startStr = weekStart.toLocaleDateString('es-MX', { day: 'numeric', month: 'long' });
-  const endStr = end.toLocaleDateString('es-MX', { day: 'numeric', month: 'long' });
-  return `${startStr} – ${endStr}`;
-}
-
-// ==================== CHECKS LOGIC ====================
-
-function getCheckKey(weekKey, childId, taskId, dayIdx) {
-  return `${weekKey}:${childId}:${taskId}:${dayIdx}`;
-}
-
-function isDayChecked(weekKey, childId, taskId, dayIdx) {
-  const key = getCheckKey(weekKey, childId, taskId, dayIdx);
-  return checksData[key] === 1;
-}
-
-function toggleCheck(weekKey, childId, taskId, dayIdx) {
-  const key = getCheckKey(weekKey, childId, taskId, dayIdx);
-  if (checksData[key] === 1) {
-    delete checksData[key];
-    return false;
-  } else {
-    checksData[key] = 1;
-    return true;
-  }
-}
-
-function getWeekChecksForTask(weekKey, childId, taskId) {
-  let count = 0;
-  for(let d = 0; d < 7; d++) {
-    if(isDayChecked(weekKey, childId, taskId, d)) count++;
-  }
-  return count;
-}
-
-function calcWeekPct(weekKey, child) {
-  let totalRequired = 0;
-  let totalDone = 0;
-  child.tasks.filter(t => t.active).forEach(task => {
-    const done = Math.min(getWeekChecksForTask(weekKey, child.id, task.id), task.freq);
-    totalRequired += task.freq;
-    totalDone += done;
+    return d;
   });
-  if (totalRequired === 0) return 0;
-  return Math.round((totalDone / totalRequired) * 100);
 }
 
-function calcDayPct(weekKey, child, dayIdx) {
-  // For day progress: count tasks completed today vs all active tasks
-  const activeTasks = child.tasks.filter(t => t.active);
-  if (activeTasks.length === 0) return 0;
-  let done = 0;
-  activeTasks.forEach(task => {
-    if (isDayChecked(weekKey, child.id, task.id, dayIdx)) done++;
+function fmtDate(d) {
+  return d.toLocaleDateString('es-MX', { weekday:'long', day:'numeric', month:'long' });
+}
+
+function fmtWeek(ws) {
+  const we = new Date(ws);
+  we.setDate(we.getDate() + 6);
+  const a = ws.toLocaleDateString('es-MX', { day:'numeric', month:'long' });
+  const b = we.toLocaleDateString('es-MX', { day:'numeric', month:'long' });
+  return `${a} – ${b}`;
+}
+
+// ══════════════════════════════════════════
+//  FIREBASE HELPERS
+// ══════════════════════════════════════════
+function fbRef(path) { return ref(db, path); }
+
+async function fbSet(path, val) {
+  await set(fbRef(path), val);
+}
+
+async function fbGet(path) {
+  const snap = await get(fbRef(path));
+  return snap.exists() ? snap.val() : null;
+}
+
+function fbListen(path, cb) {
+  onValue(fbRef(path), snap => cb(snap.exists() ? snap.val() : null));
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+async function init() {
+  // Load or seed children config
+  let savedChildren = await fbGet('children');
+  if (!savedChildren) {
+    // First run — seed default data
+    const obj = {};
+    DEFAULT_CHILDREN.forEach(c => { obj[c.id] = c; });
+    await fbSet('children', obj);
+    savedChildren = obj;
+  }
+  children = Object.values(savedChildren).sort((a,b) =>
+    ['gianfranco','natasha','sebastian','marifer'].indexOf(a.id) -
+    ['gianfranco','natasha','sebastian','marifer'].indexOf(b.id)
+  );
+
+  // Load checks & history
+  const [savedChecks, savedHistory] = await Promise.all([
+    fbGet('checks'),
+    fbGet('history')
+  ]);
+  checks  = savedChecks  || {};
+  history = savedHistory ? Object.values(savedHistory) : [];
+
+  // Listen to real-time changes
+  fbListen('checks', val => {
+    checks = val || {};
+    if (currentChild) renderChildScreen();
+    renderHomeCards();
   });
-  return Math.round((done / activeTasks.length) * 100);
+
+  fbListen('children', val => {
+    if (!val) return;
+    children = Object.values(val).sort((a,b) =>
+      ['gianfranco','natasha','sebastian','marifer'].indexOf(a.id) -
+      ['gianfranco','natasha','sebastian','marifer'].indexOf(b.id)
+    );
+    if (currentChild) {
+      currentChild = children.find(c => c.id === currentChild.id);
+    }
+    renderHomeCards();
+    if (currentChild) renderChildScreen();
+  });
+
+  fbListen('history', val => {
+    history = val ? Object.values(val) : [];
+  });
+
+  hideLoading();
+  renderHome();
+  showScreen('home');
 }
 
-function getFreqLabel(freq) {
-  if (freq === 7) return 'Diaria';
-  if (freq === 1) return 'Única';
-  return `${freq}x semana`;
+function hideLoading() {
+  const el = document.getElementById('loading-screen');
+  el.style.opacity = '0';
+  setTimeout(() => el.style.display = 'none', 400);
 }
 
-function getFreqDesc(freq) {
-  if (freq === 7) return 'todos los días';
-  if (freq === 1) return '1 vez en la semana';
-  return `${freq} veces por semana`;
+// ══════════════════════════════════════════
+//  CHECKS LOGIC
+// ══════════════════════════════════════════
+function isChecked(wk, childId, taskId, dIdx) {
+  return checks?.[wk]?.[childId]?.[taskId]?.[dIdx] === 1;
 }
 
-// ==================== HOME SCREEN ====================
+async function toggleCheck(wk, childId, taskId, dIdx) {
+  const wasOn = isChecked(wk, childId, taskId, dIdx);
+  const path = `checks/${wk}/${childId}/${taskId}/${dIdx}`;
+  await fbSet(path, wasOn ? null : 1);
+  return !wasOn;
+}
 
+function weekChecks(wk, childId, taskId) {
+  let n = 0;
+  for(let d=0;d<7;d++) if(isChecked(wk,childId,taskId,d)) n++;
+  return n;
+}
+
+function weekPct(wk, child) {
+  const active = child.tasks.filter(t => t.active);
+  if (!active.length) return 0;
+  let req = 0, done = 0;
+  active.forEach(t => {
+    req  += t.freq;
+    done += Math.min(weekChecks(wk, child.id, t.id), t.freq);
+  });
+  return req ? Math.round(done/req*100) : 0;
+}
+
+function dayPct(wk, child, dIdx) {
+  const active = child.tasks.filter(t => t.active);
+  if (!active.length) return 0;
+  const done = active.filter(t => isChecked(wk, child.id, t.id, dIdx)).length;
+  return Math.round(done/active.length*100);
+}
+
+function weekSummary(wk, child) {
+  const active = child.tasks.filter(t => t.active);
+  let req = 0, done = 0;
+  active.forEach(t => {
+    req  += t.freq;
+    done += Math.min(weekChecks(wk, child.id, t.id), t.freq);
+  });
+  return { req, done };
+}
+
+// ── STREAK: consecutive days where dayPct >= 80% ──
+function calcStreak(child) {
+  const today = new Date();
+  const wk = weekKey(today);
+  const todayD = dayIdx(today);
+  let streak = 0;
+
+  // Walk backwards from today
+  for (let d = todayD; d >= 0; d--) {
+    const pct = dayPct(wk, child, d);
+    if (pct >= 80) streak++;
+    else break;
+  }
+
+  // If full week so far is streaking, check previous weeks too
+  if (streak === todayD + 1) {
+    let checkDate = new Date(today);
+    checkDate.setDate(checkDate.getDate() - (todayD + 1));
+    for (let w = 0; w < 8; w++) {
+      const prevWk = weekKey(checkDate);
+      const prevWs = weekStart(checkDate);
+      const prevDates = weekDates(prevWs);
+      let allGood = true;
+      for (let d = 6; d >= 0; d--) {
+        const pct = dayPct(prevWk, child, d);
+        if (pct >= 80) streak++;
+        else { allGood = false; break; }
+      }
+      if (!allGood) break;
+      checkDate.setDate(checkDate.getDate() - 7);
+    }
+  }
+
+  return streak;
+}
+
+function freqLabel(f) {
+  if (f === 7) return 'Diaria';
+  if (f === 1) return 'Única';
+  return `${f}x sem`;
+}
+
+function freqDesc(f) {
+  if (f === 7) return 'todos los días';
+  if (f === 1) return '1 vez en la semana';
+  return `${f} veces por semana`;
+}
+
+// ══════════════════════════════════════════
+//  HOME
+// ══════════════════════════════════════════
 function renderHome() {
   const today = new Date();
-  const weekKey = getWeekKey(today);
-  const weekStart = getWeekStart(today);
-  
-  document.getElementById('home-week-label').textContent = `Semana: ${formatWeekLabel(weekStart)}`;
-  
-  const container = document.getElementById('cards-container');
+  const ws = weekStart(today);
+  document.getElementById('home-week-label').textContent = fmtWeek(ws);
+  renderHomeCards();
+}
+
+function renderHomeCards() {
+  const today = new Date();
+  const wk = weekKey(today);
+  const container = document.getElementById('home-cards');
   container.innerHTML = '';
-  
-  appData.children.forEach(child => {
-    const pct = calcWeekPct(weekKey, child);
-    
+
+  children.forEach(child => {
+    const pct    = weekPct(wk, child);
+    const streak = calcStreak(child);
+
     const card = document.createElement('div');
     card.className = 'child-card';
     card.onclick = () => openChild(child.id);
-    
-    // Circumference for ring
-    const r = 22;
-    const circ = 2 * Math.PI * r;
-    const offset = circ - (pct / 100) * circ;
-    
+
     card.innerHTML = `
-      <div class="card-accent" style="background:${child.color}"></div>
-      <div class="child-avatar" style="background:${child.color}">
-        ${child.emoji}
-      </div>
-      <div class="child-name">${child.name}</div>
-      <div class="progress-ring-container">
-        <div class="ring-wrap">
-          <svg width="52" height="52" viewBox="0 0 52 52">
-            <circle class="ring-bg" cx="26" cy="26" r="${r}"/>
-            <circle class="ring-fill" cx="26" cy="26" r="${r}"
-              stroke="${child.color}"
-              stroke-dasharray="${circ}"
-              stroke-dashoffset="${offset}"/>
-          </svg>
-          <div class="ring-text">${pct}%</div>
+      <div class="child-card-bar" style="background:${child.color}"></div>
+      <div class="child-avatar" style="background:${child.color}">${child.emoji}</div>
+      <div class="child-card-info">
+        <div class="child-card-name">${child.name}</div>
+        <div class="child-card-bar-wrap">
+          <div class="child-card-bar-fill" style="width:${pct}%;background:${child.color}"></div>
         </div>
-        <div class="progress-info">
-          <div class="pct-label" style="color:${child.color}">${pct}%</div>
-          <div class="pct-sub">esta semana</div>
+        <div class="child-card-meta">
+          <span>Esta semana</span>
+          ${streak >= 2 ? `<span class="streak-pill">🔥 ${streak} días</span>` : ''}
         </div>
       </div>
+      <div class="child-card-pct" style="color:${child.color}">${pct}%</div>
     `;
-    
     container.appendChild(card);
   });
-
-  // Auto close week check
-  autoCloseWeekIfNeeded();
 }
 
-function autoCloseWeekIfNeeded() {
-  const today = new Date();
-  const lastClosed = localStorage.getItem('tasksApp_lastClosed');
-  const weekKey = getWeekKey(today);
-  
-  if (lastClosed && lastClosed !== weekKey) {
-    // Week changed — check if previous week was closed
-    const prevWeekStart = getWeekStart(new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000));
-    const prevWeekKey = getWeekKey(prevWeekStart);
-    const alreadyClosed = historyData.find(h => h.weekKey === prevWeekKey);
-    if (!alreadyClosed) {
-      closeWeek(prevWeekKey);
-    }
-  }
-  localStorage.setItem('tasksApp_lastClosed', weekKey);
-}
-
-// ==================== CHILD SCREEN ====================
-
-function openChild(childId) {
-  currentChild = appData.children.find(c => c.id === childId);
-  const today = new Date();
-  currentDayIndex = getDayOfWeekIndex(today);
-  
+// ══════════════════════════════════════════
+//  CHILD SCREEN
+// ══════════════════════════════════════════
+function openChild(id) {
+  currentChild  = children.find(c => c.id === id);
+  const today   = new Date();
+  currentDayIdx = dayIdx(today);
   renderChildScreen();
   showScreen('child');
 }
 
 function renderChildScreen() {
-  const today = new Date();
-  const weekKey = getWeekKey(today);
-  const weekStart = getWeekStart(today);
-  const weekDates = getWeekDates(weekStart);
-  const todayDayIdx = getDayOfWeekIndex(today);
-  const color = currentChild.color;
+  const today  = new Date();
+  const wk     = weekKey(today);
+  const ws     = weekStart(today);
+  const dates  = weekDates(ws);
+  const todayD = dayIdx(today);
+  const color  = currentChild.color;
 
   // Header
-  document.getElementById('child-header').style.background = `linear-gradient(135deg, ${color}dd, ${color}99)`;
-  document.getElementById('child-header-name').textContent = currentChild.name;
-  
-  const displayDate = weekDates[currentDayIndex];
-  document.getElementById('child-header-date').textContent = formatDate(displayDate);
+  const header = document.getElementById('child-header');
+  header.style.background = `linear-gradient(150deg, ${color}EE, ${color}99)`;
+  document.getElementById('child-name').textContent = currentChild.name;
+  document.getElementById('child-date').textContent = fmtDate(dates[currentDayIdx]);
 
-  // Weekly progress
-  const weekPct = calcWeekPct(weekKey, currentChild);
-  document.getElementById('weekly-progress-fill').style.width = weekPct + '%';
-  document.getElementById('weekly-pct-text').textContent = weekPct + '%';
+  // Streak
+  const streak = calcStreak(currentChild);
+  document.getElementById('streak-num').textContent = streak;
 
-  // Day progress
-  const dayPct = calcDayPct(weekKey, currentChild, currentDayIndex);
-  document.getElementById('day-progress-pct').textContent = dayPct + '%';
-
-  // Count weekly completed vs required
-  let totalReq = 0, totalDone = 0;
-  currentChild.tasks.filter(t => t.active).forEach(task => {
-    totalReq += task.freq;
-    totalDone += Math.min(getWeekChecksForTask(weekKey, currentChild.id, task.id), task.freq);
-  });
-  document.getElementById('weekly-tasks-label').textContent = `${totalDone} de ${totalReq} cumplimientos`;
+  // Stats
+  const dp = dayPct(wk, currentChild, currentDayIdx);
+  const wp = weekPct(wk, currentChild);
+  const { req, done } = weekSummary(wk, currentChild);
+  document.getElementById('stat-day-pct').textContent  = dp + '%';
+  document.getElementById('stat-week-pct').textContent = wp + '%';
+  document.getElementById('stat-checks').textContent   = `${done}/${req}`;
 
   // Day tabs
-  const tabsContainer = document.getElementById('day-tabs');
-  tabsContainer.innerHTML = '';
-  weekDates.forEach((date, idx) => {
-    const tab = document.createElement('button');
-    tab.className = 'day-tab' + (idx === currentDayIndex ? ' active' : '') + (idx === todayDayIdx ? ' today-tab' : '');
-    if (idx === currentDayIndex) {
-      tab.style.background = color;
+  const tabsEl = document.getElementById('day-tabs');
+  tabsEl.innerHTML = '';
+  dates.forEach((date, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'day-tab'
+      + (i === currentDayIdx ? ' active' : '')
+      + (i === todayD ? ' today-indicator' : '');
+    if (i === currentDayIdx) {
+      btn.style.background = color;
+    } else if (i === todayD) {
+      btn.style.color = color;
+      btn.style.outlineColor = color;
     }
-    tab.innerHTML = `<span class="tab-day">${DAYS[idx]}</span><span class="tab-num">${date.getDate()}</span>`;
-    tab.onclick = () => switchDay(idx);
-    tabsContainer.appendChild(tab);
+    btn.innerHTML = `<span class="tab-day">${DAYS[i]}</span><span class="tab-num">${date.getDate()}</span>`;
+    btn.onclick = () => { currentDayIdx = i; renderChildScreen(); };
+    tabsEl.appendChild(btn);
   });
 
-  // Readonly banner
-  const isToday = currentDayIndex === todayDayIdx;
-  const isPast = currentDayIndex < todayDayIdx;
-  document.getElementById('readonly-banner').style.display = (isPast && !isToday) ? 'block' : 'none';
+  // Readonly banner — allow marking past days in current week
+  const isFuture = currentDayIdx > todayD;
+  document.getElementById('readonly-banner').style.display = isFuture ? 'block' : 'none';
 
-  // Section label
-  document.getElementById('tasks-section-label').textContent = isToday ? 'Tareas de hoy' : `Tareas del ${DAYS_FULL[currentDayIndex]}`;
+  // Section heading
+  document.getElementById('tasks-heading').textContent =
+    currentDayIdx === todayD ? 'Tareas de hoy' : `Tareas del ${DAYS_FULL[currentDayIdx]}`;
 
   // History button
-  document.getElementById('child-history-btn').onclick = () => openHistory(currentChild.id);
-  document.getElementById('child-history-btn').style.color = color;
+  const hBtn = document.getElementById('history-btn');
+  hBtn.style.color = color;
+  hBtn.onclick = () => openHistory(currentChild.id);
 
-  // Tasks
-  renderTasksList(weekKey, todayDayIdx);
+  renderTasksList(wk, todayD);
 }
 
-function renderTasksList(weekKey, todayDayIdx) {
-  const list = document.getElementById('tasks-list');
+function renderTasksList(wk, todayD) {
+  const list     = document.getElementById('tasks-list');
   list.innerHTML = '';
-  const isEditable = currentDayIndex <= todayDayIdx;
-  const color = currentChild.color;
+  const color    = currentChild.color;
+  const isEditable = currentDayIdx <= todayD;
+  const active   = currentChild.tasks.filter(t => t.active);
 
-  const activeTasks = currentChild.tasks.filter(t => t.active);
-
-  if (activeTasks.length === 0) {
-    list.innerHTML = `<div class="empty-state"><div class="emoji">📋</div><p>No hay tareas activas</p></div>`;
+  if (!active.length) {
+    list.innerHTML = `<div class="empty-state"><span class="emoji">📋</span><p>No hay tareas activas</p></div>`;
     return;
   }
 
-  activeTasks.forEach(task => {
-    const checked = isDayChecked(weekKey, currentChild.id, task.id, currentDayIndex);
-    const weekCount = getWeekChecksForTask(weekKey, currentChild.id, task.id);
-    const weekFull = weekCount >= task.freq;
+  active.forEach(task => {
+    const checked   = isChecked(wk, currentChild.id, task.id, currentDayIdx);
+    const wkCount   = weekChecks(wk, currentChild.id, task.id);
+    const wkFull    = wkCount >= task.freq;
 
     const item = document.createElement('div');
-    item.className = 'task-item' + (checked ? ' completed' : '');
-    item.style.cursor = isEditable ? 'pointer' : 'default';
+    item.className = 'task-item' + (checked ? ' completed' : '') + (!isEditable ? ' readonly' : '');
 
-    const freqBadgeColor = weekFull ? color + '22' : '#F7FAFC';
-    const freqTextColor = weekFull ? color : '#718096';
-    const weekCountColor = weekFull ? color : '#A0AEC0';
+    const checkStyle = checked
+      ? `background:${color}; border-color:${color};`
+      : '';
+
+    const countColor = wkFull ? color : 'var(--text-muted)';
+    const countBg    = wkFull ? color + '18' : 'var(--bg)';
 
     item.innerHTML = `
-      <div class="task-check-area">
-        <div class="task-checkbox" style="color:${color}; ${checked ? `background:${color}` : ''}">
-          ${checked ? '✓' : ''}
-        </div>
+      <div class="task-check-zone">
+        <div class="task-check" style="${checkStyle}">${checked ? '✓' : ''}</div>
       </div>
       <div class="task-body">
         <div class="task-name">${task.name}</div>
-        <span class="task-freq-badge" style="background:${freqBadgeColor}; color:${freqTextColor}">
-          ${getFreqLabel(task.freq)}
-        </span>
-        <span class="task-week-count" style="background:${weekCountColor}22; color:${weekCountColor}">
-          ${weekCount}/${task.freq} esta semana
-        </span>
+        <div class="task-badges">
+          <span class="badge badge-freq">${freqLabel(task.freq)}</span>
+          <span class="badge badge-count" style="color:${countColor};background:${countBg}">
+            ${wkCount}/${task.freq} esta sem.
+          </span>
+        </div>
       </div>
     `;
 
     if (isEditable) {
-      item.onclick = () => handleTaskToggle(task, item, weekKey, todayDayIdx);
+      item.onclick = () => handleToggle(task, wk, todayD);
     }
 
     list.appendChild(item);
   });
 }
 
-function handleTaskToggle(task, itemEl, weekKey, todayDayIdx) {
-  const wasChecked = isDayChecked(weekKey, currentChild.id, task.id, currentDayIndex);
-  const nowChecked = toggleCheck(weekKey, currentChild.id, task.id, currentDayIndex);
-  saveData();
+async function handleToggle(task, wk, todayD) {
+  const nowOn = await toggleCheck(wk, currentChild.id, task.id, currentDayIdx);
+  if (nowOn) spawnConfetti(currentChild.color);
 
-  if (nowChecked && !wasChecked) {
-    spawnConfetti(itemEl, currentChild.color);
+  // Check for streak milestone
+  const streak = calcStreak(currentChild);
+  if (nowOn && streak > 0 && streak % 3 === 0) {
+    showStreakToast(`🔥 ¡${streak} días seguidos, ${currentChild.name.split(' ')[0]}!`);
   }
 
   renderChildScreen();
 }
 
-function switchDay(idx) {
-  currentDayIndex = idx;
-  renderChildScreen();
-}
-
-// ==================== CONFETTI ====================
-
-function spawnConfetti(el, color) {
-  const rect = el.getBoundingClientRect();
-  const colors = [color, '#FCD34D', '#34D399', '#F87171', '#A78BFA'];
-  for(let i = 0; i < 8; i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-    piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-    piece.style.left = (rect.left + rect.width * Math.random()) + 'px';
-    piece.style.top = rect.top + 'px';
-    piece.style.transform = `rotate(${Math.random() * 360}deg)`;
-    piece.style.animationDelay = (Math.random() * 0.2) + 's';
-    document.body.appendChild(piece);
-    setTimeout(() => piece.remove(), 1000);
+// ══════════════════════════════════════════
+//  CONFETTI + STREAK TOAST
+// ══════════════════════════════════════════
+function spawnConfetti(color) {
+  const colors = [color, '#FCD34D', '#34D399', '#F87171', '#A78BFA', '#FB923C'];
+  for (let i = 0; i < 10; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.cssText = `
+      background:${colors[i % colors.length]};
+      left:${30 + Math.random()*40}%;
+      top:${40 + Math.random()*20}%;
+      animation-delay:${Math.random()*0.25}s;
+      border-radius:${Math.random()>0.5?'50%':'3px'};
+    `;
+    document.body.appendChild(p);
+    setTimeout(() => p.remove(), 1100);
   }
 }
 
-// ==================== HISTORY SCREEN ====================
+function showStreakToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'streak-toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2600);
+}
 
+// ══════════════════════════════════════════
+//  HISTORY
+// ══════════════════════════════════════════
 function openHistory(childId) {
-  const child = appData.children.find(c => c.id === childId);
-  const header = document.getElementById('history-child-header');
-  header.style.background = `linear-gradient(135deg, ${child.color}dd, ${child.color}99)`;
-  document.getElementById('history-child-name').textContent = child.name + ' — Historial';
-  document.getElementById('history-back-btn').onclick = () => {
-    if (childId === currentChild?.id) {
-      showScreen('child');
-    } else {
-      showScreen('admin');
-    }
+  const child = children.find(c => c.id === childId);
+  const header = document.getElementById('hist-header');
+  header.style.background = `linear-gradient(150deg, ${child.color}EE, ${child.color}99)`;
+  document.getElementById('hist-title').textContent = child.name;
+  document.getElementById('hist-back').onclick = () => {
+    showScreen(currentChild?.id === childId ? 'child' : 'admin');
   };
 
-  const list = document.getElementById('history-list');
+  const list = document.getElementById('hist-list');
   list.innerHTML = '';
+  const childHist = history.filter(h => h.snapshots?.[childId]);
 
-  const childHistory = historyData.filter(h => h.snapshots && h.snapshots[childId]);
-  
-  if (childHistory.length === 0) {
-    list.innerHTML = `<div class="empty-state"><div class="emoji">📊</div><p>Aún no hay semanas cerradas</p></div>`;
+  if (!childHist.length) {
+    list.innerHTML = `<div class="empty-state"><span class="emoji">📊</span><p>Aún no hay semanas cerradas</p></div>`;
   } else {
-    childHistory.slice().reverse().forEach(week => {
+    [...childHist].reverse().forEach(week => {
       const snap = week.snapshots[childId];
+      const pctColor = snap.pct >= 80 ? '#10B981' : snap.pct >= 50 ? '#F59E0B' : '#EF4444';
       const card = document.createElement('div');
       card.className = 'week-card';
-      
-      const pctColor = snap.pct >= 80 ? '#10B981' : snap.pct >= 50 ? '#F59E0B' : '#EF4444';
-      
       card.innerHTML = `
         <div class="week-card-header" onclick="this.parentElement.classList.toggle('expanded')">
           <div>
-            <div class="week-card-title">Semana ${week.weekKey}</div>
-            <div style="font-size:12px; color:#718096; font-weight:600; margin-top:2px;">${week.weekStart} – ${week.weekEnd}</div>
+            <div class="week-card-title">Semana del ${week.weekStart}</div>
+            <div class="week-card-sub">al ${week.weekEnd}</div>
           </div>
-          <div style="text-align:right;">
+          <div style="text-align:right">
             <div class="week-card-pct" style="color:${pctColor}">${snap.pct}%</div>
-            <div style="font-size:11px; color:#A0AEC0; font-weight:600;">cumplimiento</div>
+            <div style="font-size:11px;color:var(--text-muted);font-weight:600">cumplimiento</div>
           </div>
         </div>
         <div class="week-card-details">
-          ${snap.tasks ? snap.tasks.map(t => `
-            <div class="detail-task-row">
-              <span class="detail-task-name">${t.name}</span>
-              <span class="detail-task-score" style="color:${t.done >= t.freq ? child.color : '#EF4444'}">${t.done}/${t.freq}</span>
+          ${(snap.tasks||[]).map(t => `
+            <div class="detail-row">
+              <span class="detail-name">${t.name}</span>
+              <span class="detail-score" style="color:${t.done>=t.freq?child.color:'#EF4444'}">${t.done}/${t.freq}</span>
             </div>
-          `).join('') : ''}
+          `).join('')}
         </div>
       `;
       list.appendChild(card);
@@ -1728,43 +1793,43 @@ function openHistory(childId) {
   showScreen('history');
 }
 
-// ==================== ADMIN SCREEN ====================
-
+// ══════════════════════════════════════════
+//  ADMIN
+// ══════════════════════════════════════════
 function openAdmin() {
-  renderAdminSummary();
+  renderSummary();
   renderAdminTasks();
   renderAdminHistory();
   showScreen('admin');
 }
 
-function switchAdminTab(tab, btn) {
+window.switchAdminTab = function(tab, btn) {
   document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-  
-  document.getElementById('admin-summary').style.display = tab === 'summary' ? 'block' : 'none';
-  document.getElementById('admin-tasks').style.display = tab === 'tasks' ? 'block' : 'none';
-  document.getElementById('admin-history').style.display = tab === 'history' ? 'block' : 'none';
-}
+  document.querySelectorAll('.admin-pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('pane-' + tab).classList.add('active');
+};
 
-function renderAdminSummary() {
+function renderSummary() {
   const today = new Date();
-  const weekKey = getWeekKey(today);
-  const table = document.getElementById('admin-summary-table');
-  table.innerHTML = `<div style="padding:14px 16px; font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1.5px; color:#718096; border-bottom:1px solid #EDF2F7;">Semana actual</div>`;
-  
-  appData.children.forEach(child => {
-    const pct = calcWeekPct(weekKey, child);
-    const lastWeek = historyData.filter(h => h.snapshots && h.snapshots[child.id]).slice(-1)[0];
-    const prevPct = lastWeek ? lastWeek.snapshots[child.id].pct : null;
-    const trend = prevPct !== null ? (pct > prevPct ? '↑' : pct < prevPct ? '↓' : '→') : '–';
-    const trendColor = trend === '↑' ? '#10B981' : trend === '↓' ? '#EF4444' : '#A0AEC0';
-    
+  const wk    = weekKey(today);
+  const table = document.getElementById('summary-table');
+  table.innerHTML = '';
+
+  children.forEach(child => {
+    const pct    = weekPct(wk, child);
+    const streak = calcStreak(child);
+    const lastW  = [...history].reverse().find(h => h.snapshots?.[child.id]);
+    const prev   = lastW ? lastW.snapshots[child.id].pct : null;
+    const trendChar  = prev === null ? '–' : pct > prev ? '↑' : pct < prev ? '↓' : '→';
+    const trendColor = trendChar === '↑' ? '#10B981' : trendChar === '↓' ? '#EF4444' : '#A0AEC0';
+
     table.innerHTML += `
       <div class="summary-row">
         <div class="summary-dot" style="background:${child.color}"></div>
         <div class="summary-name">${child.name}</div>
-        ${prevPct !== null ? `<div class="prev-pct">${prevPct}%</div>` : ''}
-        <div class="summary-trend" style="color:${trendColor}">${trend}</div>
+        ${streak >= 2 ? `<div class="summary-streak">🔥${streak}</div>` : '<div></div>'}
+        <div class="summary-trend" style="color:${trendColor}">${trendChar}</div>
         <div class="summary-pct" style="color:${child.color}">${pct}%</div>
       </div>
     `;
@@ -1774,344 +1839,303 @@ function renderAdminSummary() {
 function renderAdminTasks() {
   const container = document.getElementById('admin-tasks-list');
   container.innerHTML = '';
-  
-  appData.children.forEach((child, childIdx) => {
+
+  children.forEach(child => {
     const section = document.createElement('div');
     section.className = 'child-section';
-    
     section.innerHTML = `
       <div class="child-section-header" onclick="this.parentElement.classList.toggle('section-open')">
         <h3 style="color:${child.color}">${child.name}</h3>
         <span class="section-toggle">▾</span>
       </div>
       <div class="section-tasks">
-        <div id="tasks-edit-${child.id}"></div>
-        <div class="add-task-form">
-          <input class="add-task-input" id="new-task-${child.id}" placeholder="Nueva tarea..." type="text" />
+        <div id="edit-tasks-${child.id}"></div>
+        <div class="add-task-row">
+          <input class="add-input" id="new-task-${child.id}" placeholder="Nueva tarea…" type="text"/>
           <button class="add-btn" style="background:${child.color}" onclick="addTask('${child.id}')">+ Agregar</button>
         </div>
       </div>
     `;
-    
     container.appendChild(section);
-    renderChildEditTasks(child.id);
+    renderChildEditList(child.id);
   });
 }
 
-function renderChildEditTasks(childId) {
-  const child = appData.children.find(c => c.id === childId);
-  const container = document.getElementById('tasks-edit-' + childId);
-  container.innerHTML = '';
-  
-  child.tasks.forEach((task, taskIdx) => {
+function renderChildEditList(childId) {
+  const child = children.find(c => c.id === childId);
+  const el    = document.getElementById('edit-tasks-' + childId);
+  if (!el) return;
+  el.innerHTML = '';
+
+  child.tasks.forEach((task, idx) => {
     const row = document.createElement('div');
     row.className = 'admin-task-row';
     row.innerHTML = `
-      <div class="task-action-btns">
-        <button class="icon-btn" onclick="toggleTaskActive('${childId}', ${taskIdx})" title="${task.active ? 'Desactivar' : 'Activar'}">
-          ${task.active ? '👁' : '🚫'}
-        </button>
-      </div>
-      <div class="admin-task-name ${task.active ? '' : 'inactive'}">${task.name}</div>
-      <div class="freq-selector">
-        <button class="freq-btn" onclick="changeFreq('${childId}', ${taskIdx}, -1)">−</button>
+      <button class="icon-btn" onclick="toggleActive('${childId}',${idx})" title="${task.active?'Desactivar':'Activar'}">
+        ${task.active ? '👁' : '🚫'}
+      </button>
+      <div class="admin-task-name ${task.active?'':'inactive'}">${task.name}</div>
+      <div class="freq-ctrl">
+        <button class="freq-btn" onclick="changeFreq('${childId}',${idx},-1)">−</button>
         <span class="freq-val">${task.freq}</span>
-        <button class="freq-btn" onclick="changeFreq('${childId}', ${taskIdx}, 1)">+</button>
+        <button class="freq-btn" onclick="changeFreq('${childId}',${idx},1)">+</button>
       </div>
-      <div class="task-action-btns">
-        <button class="icon-btn" onclick="openEditModal('${childId}', ${taskIdx})">✏️</button>
-        <button class="icon-btn danger" onclick="confirmDeleteTask('${childId}', ${taskIdx})">🗑</button>
-      </div>
+      <button class="icon-btn" onclick="openEdit('${childId}',${idx})">✏️</button>
+      <button class="icon-btn" onclick="confirmDelete('${childId}',${idx})">🗑</button>
     `;
-    container.appendChild(row);
+    el.appendChild(row);
   });
 }
 
 function renderAdminHistory() {
-  const container = document.getElementById('admin-history-list');
-  container.innerHTML = '';
-  
-  if (historyData.length === 0) {
-    container.innerHTML = `<div class="empty-state"><div class="emoji">📊</div><p>No hay semanas cerradas aún</p></div>`;
+  const el = document.getElementById('admin-history-list');
+  el.innerHTML = '';
+
+  if (!history.length) {
+    el.innerHTML = `<div class="empty-state"><span class="emoji">📊</span><p>No hay semanas cerradas aún</p></div>`;
     return;
   }
-  
-  historyData.slice().reverse().forEach(week => {
+
+  [...history].reverse().forEach(week => {
     const card = document.createElement('div');
     card.className = 'week-card';
-    
-    let summaryHTML = '';
-    appData.children.forEach(child => {
-      const snap = week.snapshots && week.snapshots[child.id];
+    let rows = '';
+    children.forEach(child => {
+      const snap = week.snapshots?.[child.id];
       if (!snap) return;
-      const pctColor = snap.pct >= 80 ? '#10B981' : snap.pct >= 50 ? '#F59E0B' : '#EF4444';
-      summaryHTML += `
-        <div style="display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:1px solid #EDF2F7;">
-          <div style="width:10px;height:10px;border-radius:50%;background:${child.color}"></div>
-          <span style="flex:1;font-size:14px;font-weight:700">${child.name}</span>
-          <span style="font-family:'Nunito',sans-serif;font-weight:900;color:${pctColor}">${snap.pct}%</span>
-          <button onclick="openHistory('${child.id}')" style="background:${child.color}22;border:none;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:${child.color};cursor:pointer;">Ver →</button>
+      const pc = snap.pct >= 80 ? '#10B981' : snap.pct >= 50 ? '#F59E0B' : '#EF4444';
+      rows += `
+        <div class="detail-row">
+          <span style="width:10px;height:10px;border-radius:50%;background:${child.color};display:inline-block;margin-right:8px;flex-shrink:0"></span>
+          <span class="detail-name">${child.name}</span>
+          <span class="detail-score" style="color:${pc}">${snap.pct}%</span>
+          <button onclick="openHistory('${child.id}')" style="margin-left:10px;background:${child.color}18;border:none;border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:${child.color};cursor:pointer;flex-shrink:0">Ver →</button>
         </div>
       `;
     });
-    
     card.innerHTML = `
       <div class="week-card-header" onclick="this.parentElement.classList.toggle('expanded')">
         <div>
-          <div class="week-card-title">Semana ${week.weekKey}</div>
-          <div style="font-size:12px;color:#718096;font-weight:600;margin-top:2px;">${week.weekStart} – ${week.weekEnd}</div>
+          <div class="week-card-title">Semana del ${week.weekStart}</div>
+          <div class="week-card-sub">al ${week.weekEnd}</div>
         </div>
-        <span style="font-size:20px;color:#CBD5E0">▾</span>
+        <span style="color:var(--text-muted);font-size:18px">▾</span>
       </div>
-      <div class="week-card-details">${summaryHTML}</div>
+      <div class="week-card-details">${rows}</div>
     `;
-    container.appendChild(card);
+    el.appendChild(card);
   });
 }
 
-// ==================== ADMIN ACTIONS ====================
+// ── Admin actions ──
+window.toggleActive = async function(childId, idx) {
+  const child = children.find(c => c.id === childId);
+  child.tasks[idx].active = !child.tasks[idx].active;
+  await fbSet(`children/${childId}/tasks`, child.tasks);
+  renderChildEditList(childId);
+};
 
-function toggleTaskActive(childId, taskIdx) {
-  const child = appData.children.find(c => c.id === childId);
-  child.tasks[taskIdx].active = !child.tasks[taskIdx].active;
-  saveData();
-  renderChildEditTasks(childId);
-}
+window.changeFreq = async function(childId, idx, delta) {
+  const child = children.find(c => c.id === childId);
+  child.tasks[idx].freq = Math.max(1, Math.min(7, child.tasks[idx].freq + delta));
+  await fbSet(`children/${childId}/tasks`, child.tasks);
+  renderChildEditList(childId);
+};
 
-function changeFreq(childId, taskIdx, delta) {
-  const child = appData.children.find(c => c.id === childId);
-  const task = child.tasks[taskIdx];
-  task.freq = Math.max(1, Math.min(7, task.freq + delta));
-  saveData();
-  renderChildEditTasks(childId);
-}
-
-function addTask(childId) {
+window.addTask = async function(childId) {
   const input = document.getElementById('new-task-' + childId);
-  const name = input.value.trim();
+  const name  = input.value.trim();
   if (!name) return;
-  
-  const child = appData.children.find(c => c.id === childId);
-  const newTask = {
-    id: 't' + Date.now(),
-    name: name,
-    freq: 7,
-    active: true
-  };
-  child.tasks.push(newTask);
-  saveData();
+  const child = children.find(c => c.id === childId);
+  child.tasks.push({ id: 't' + Date.now(), name, freq: 7, active: true });
+  await fbSet(`children/${childId}/tasks`, child.tasks);
   input.value = '';
-  renderChildEditTasks(childId);
-}
+  renderChildEditList(childId);
+};
 
-function confirmDeleteTask(childId, taskIdx) {
-  const child = appData.children.find(c => c.id === childId);
+window.confirmDelete = function(childId, idx) {
+  const child = children.find(c => c.id === childId);
   showConfirm(
     '🗑 Eliminar tarea',
-    `¿Eliminar "${child.tasks[taskIdx].name}"? Esta acción no se puede deshacer.`,
-    () => {
-      child.tasks.splice(taskIdx, 1);
-      saveData();
-      renderChildEditTasks(childId);
+    `¿Eliminar "${child.tasks[idx].name}"? No se puede deshacer.`,
+    async () => {
+      child.tasks.splice(idx, 1);
+      await fbSet(`children/${childId}/tasks`, child.tasks);
+      renderChildEditList(childId);
     }
   );
-}
+};
 
-function confirmCloseWeek() {
-  const today = new Date();
-  const weekKey = getWeekKey(today);
-  const already = historyData.find(h => h.weekKey === weekKey);
-  
-  if (already) {
-    showConfirm('⚠️ Semana ya cerrada', 'Esta semana ya fue cerrada. ¿Quieres sobreescribir el snapshot?', () => {
-      closeWeek(weekKey);
-      renderAdminSummary();
-      renderAdminHistory();
-    });
-    return;
-  }
-  
-  showConfirm('🔒 Cerrar semana', 'Se guardará el progreso actual como historial. Puedes seguir registrando tareas después.', () => {
-    closeWeek(weekKey);
-    renderAdminSummary();
-    renderAdminHistory();
-  });
-}
+window.confirmCloseWeek = function() {
+  const wk = weekKey(new Date());
+  const already = history.find(h => h.weekKey === wk);
+  showConfirm(
+    already ? '⚠️ Ya cerrada — sobreescribir' : '🔒 Cerrar semana',
+    'Se guardará el progreso actual de todos los hijos como historial permanente.',
+    () => closeWeek(wk)
+  );
+};
 
-function closeWeek(weekKey) {
-  const weekStart = new Date(weekKey + 'T00:00:00');
-  const weekEnd = new Date(weekStart);
-  weekEnd.setDate(weekEnd.getDate() + 6);
-  
+async function closeWeek(wk) {
+  const ws = weekStart(new Date(wk + 'T12:00:00'));
+  const we = new Date(ws); we.setDate(we.getDate() + 6);
+
   const snapshots = {};
-  appData.children.forEach(child => {
-    const tasks = child.tasks.filter(t => t.active).map(task => ({
-      name: task.name,
-      done: getWeekChecksForTask(weekKey, child.id, task.id),
-      freq: task.freq
-    }));
-    
-    let totalReq = 0, totalDone = 0;
-    tasks.forEach(t => {
-      totalReq += t.freq;
-      totalDone += Math.min(t.done, t.freq);
+  children.forEach(child => {
+    const active = child.tasks.filter(t => t.active);
+    let req = 0, done = 0;
+    const tasks = active.map(t => {
+      const d = weekChecks(wk, child.id, t.id);
+      req  += t.freq;
+      done += Math.min(d, t.freq);
+      return { name: t.name, done: d, freq: t.freq };
     });
-    
     snapshots[child.id] = {
-      pct: totalReq > 0 ? Math.round((totalDone / totalReq) * 100) : 0,
-      tasks: tasks
+      pct: req ? Math.round(done/req*100) : 0,
+      tasks
     };
   });
-  
-  const existing = historyData.findIndex(h => h.weekKey === weekKey);
+
   const entry = {
-    weekKey,
-    weekStart: weekStart.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }),
-    weekEnd: weekEnd.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }),
+    weekKey: wk,
+    weekStart: ws.toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'}),
+    weekEnd:   we.toLocaleDateString('es-MX',{day:'numeric',month:'long',year:'numeric'}),
     snapshots
   };
-  
-  if (existing >= 0) {
-    historyData[existing] = entry;
-  } else {
-    historyData.push(entry);
-  }
-  
-  saveData();
+
+  await fbSet(`history/${wk}`, entry);
+  renderSummary();
+  renderAdminHistory();
 }
 
-// ==================== EDIT TASK MODAL ====================
-
-function openEditModal(childId, taskIdx) {
-  const child = appData.children.find(c => c.id === childId);
-  const task = child.tasks[taskIdx];
-  editTarget = { childId, taskIdx };
-  editFreqTemp = task.freq;
-  
+// ── Edit modal ──
+window.openEdit = function(childId, idx) {
+  const child = children.find(c => c.id === childId);
+  const task  = child.tasks[idx];
+  editTarget  = { childId, idx };
+  editFreqTmp = task.freq;
   document.getElementById('edit-name').value = task.name;
-  document.getElementById('edit-freq-val').textContent = editFreqTemp;
-  document.getElementById('edit-freq-desc').textContent = getFreqDesc(editFreqTemp);
-  
-  document.getElementById('edit-modal').classList.add('active');
-}
+  document.getElementById('edit-freq-num').textContent = editFreqTmp;
+  document.getElementById('edit-freq-lbl').textContent = freqDesc(editFreqTmp);
+  document.getElementById('edit-overlay').classList.add('open');
+};
 
-function editFreqChange(delta) {
-  editFreqTemp = Math.max(1, Math.min(7, editFreqTemp + delta));
-  document.getElementById('edit-freq-val').textContent = editFreqTemp;
-  document.getElementById('edit-freq-desc').textContent = getFreqDesc(editFreqTemp);
-}
+window.editFreqDelta = function(d) {
+  editFreqTmp = Math.max(1, Math.min(7, editFreqTmp + d));
+  document.getElementById('edit-freq-num').textContent = editFreqTmp;
+  document.getElementById('edit-freq-lbl').textContent = freqDesc(editFreqTmp);
+};
 
-function saveEditTask() {
+window.saveEdit = async function() {
   const name = document.getElementById('edit-name').value.trim();
   if (!name) return;
-  
-  const child = appData.children.find(c => c.id === editTarget.childId);
-  child.tasks[editTarget.taskIdx].name = name;
-  child.tasks[editTarget.taskIdx].freq = editFreqTemp;
-  saveData();
-  renderChildEditTasks(editTarget.childId);
-  closeEditModal();
-}
+  const child = children.find(c => c.id === editTarget.childId);
+  child.tasks[editTarget.idx].name = name;
+  child.tasks[editTarget.idx].freq = editFreqTmp;
+  await fbSet(`children/${editTarget.childId}/tasks`, child.tasks);
+  renderChildEditList(editTarget.childId);
+  closeEdit();
+};
 
-function closeEditModal() {
-  document.getElementById('edit-modal').classList.remove('active');
-  editTarget = null;
-}
+window.closeEdit = function() {
+  document.getElementById('edit-overlay').classList.remove('open');
+};
 
-// ==================== PIN MODAL ====================
-
-function openAdminPin() {
-  pinBuffer = '';
-  updatePinDots();
+// ══════════════════════════════════════════
+//  PIN
+// ══════════════════════════════════════════
+window.openAdminPin = function() {
+  pinBuf = '';
+  updateDots();
   document.getElementById('pin-error').textContent = '';
-  document.getElementById('pin-modal').classList.add('active');
-}
+  document.getElementById('pin-overlay').classList.add('open');
+};
 
-function closePinModal() {
-  document.getElementById('pin-modal').classList.remove('active');
-  pinBuffer = '';
-}
+window.closePinModal = function() {
+  document.getElementById('pin-overlay').classList.remove('open');
+  pinBuf = '';
+};
 
-function pinKey(digit) {
-  if (pinBuffer.length >= 4) return;
-  pinBuffer += digit;
-  updatePinDots();
-  
-  if (pinBuffer.length === 4) {
+window.pinKey = function(d) {
+  if (pinBuf.length >= 4) return;
+  pinBuf += d;
+  updateDots();
+  if (pinBuf.length === 4) {
     setTimeout(() => {
-      if (pinBuffer === '2025') {
+      if (pinBuf === '2025') {
         closePinModal();
         openAdmin();
       } else {
-        document.getElementById('pin-error').textContent = 'PIN incorrecto, intenta de nuevo';
-        pinBuffer = '';
-        updatePinDots();
+        document.getElementById('pin-error').textContent = 'PIN incorrecto';
+        pinBuf = '';
+        updateDots();
       }
     }, 200);
   }
-}
+};
 
-function pinDelete() {
-  pinBuffer = pinBuffer.slice(0, -1);
-  updatePinDots();
-}
+window.pinDel = function() {
+  pinBuf = pinBuf.slice(0,-1);
+  updateDots();
+};
 
-function updatePinDots() {
-  for(let i = 0; i < 4; i++) {
-    const dot = document.getElementById('dot-' + i);
-    dot.classList.toggle('filled', i < pinBuffer.length);
+function updateDots() {
+  for(let i=0;i<4;i++) {
+    document.getElementById('pd'+i).classList.toggle('filled', i < pinBuf.length);
   }
 }
 
-// ==================== CONFIRM MODAL ====================
-
-function showConfirm(title, body, callback) {
+// ══════════════════════════════════════════
+//  CONFIRM
+// ══════════════════════════════════════════
+function showConfirm(title, body, cb) {
   document.getElementById('confirm-title').textContent = title;
-  document.getElementById('confirm-body').textContent = body;
-  confirmCallback = callback;
-  document.getElementById('confirm-modal').classList.add('active');
+  document.getElementById('confirm-body').textContent  = body;
+  confirmCb = cb;
+  document.getElementById('confirm-overlay').classList.add('open');
 }
 
-function closeConfirmModal() {
-  document.getElementById('confirm-modal').classList.remove('active');
-  confirmCallback = null;
-}
-
-document.getElementById('confirm-ok-btn').onclick = () => {
-  closeConfirmModal();
-  if (confirmCallback) confirmCallback();
+window.closeConfirm = function() {
+  document.getElementById('confirm-overlay').classList.remove('open');
+  confirmCb = null;
 };
 
-// ==================== NAVIGATION ====================
+document.getElementById('confirm-ok').onclick = () => {
+  closeConfirm();
+  if (confirmCb) confirmCb();
+};
 
+// ══════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════
 function showScreen(name) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + name).classList.add('active');
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
 }
 
-function goHome() {
+window.goHome = function() {
   currentChild = null;
   renderHome();
   showScreen('home');
-}
-
-// Close modals on overlay click
-document.getElementById('pin-modal').onclick = function(e) {
-  if (e.target === this) closePinModal();
-};
-document.getElementById('confirm-modal').onclick = function(e) {
-  if (e.target === this) closeConfirmModal();
-};
-document.getElementById('edit-modal').onclick = function(e) {
-  if (e.target === this) closeEditModal();
 };
 
-// ==================== INIT ====================
+window.openHistory = openHistory;
 
-loadData();
-renderHome();
-showScreen('home');
+// Close overlays on background click
+['pin-overlay','confirm-overlay','edit-overlay'].forEach(id => {
+  document.getElementById(id).addEventListener('click', function(e) {
+    if (e.target === this) {
+      this.classList.remove('open');
+      if (id === 'confirm-overlay') confirmCb = null;
+    }
+  });
+});
+
+// ══════════════════════════════════════════
+//  START
+// ══════════════════════════════════════════
+init();
 </script>
 </body>
 </html>
